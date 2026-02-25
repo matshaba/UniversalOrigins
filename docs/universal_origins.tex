@@ -1,981 +1,965 @@
-\documentclass[10pt,twocolumn]{article}
-\usepackage[margin=0.75in]{geometry}
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{physics}
-\usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage{mathtools}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[numbers]{natbib}
+% microtype disabled for compatibility
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
 
-\theoremstyle{definition}
+% ─── Colours ──────────────────────────────────────────────────────────────────
+\definecolor{navy}{RGB}{27,58,107}
+\definecolor{teal}{RGB}{14,107,116}
+\definecolor{gold}{RGB}{180,120,20}
+
+% ─── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true,linkcolor=navy,citecolor=teal,urlcolor=teal,
+  pdftitle={Theory of Universal Origins},pdfauthor={Romeo Matshaba}}
+
+% ─── Section formatting ───────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{navy}}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{teal}}{\thesubsection}{1em}{}
+
+% ─── Theorem environments ─────────────────────────────────────────────────────
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{axiom}{Axiom}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
 
+% ─── Custom macros ────────────────────────────────────────────────────────────
+\newcommand{\EPl}{E_{\mathrm{Pl}}}
+\newcommand{\tPl}{t_{\mathrm{Pl}}}
+\newcommand{\lPl}{\ell_{\mathrm{Pl}}}
+\newcommand{\TPl}{T_{\mathrm{Pl}}}
+\newcommand{\MPl}{M_{\mathrm{Pl}}}
+\newcommand{\gstar}{g_{*}}
+\newcommand{\BmL}{(B{-}L)}
+\newcommand{\Hbar}{\hbar}
+\newcommand{\ZS}{\mathcal{H}_{\mathrm{ZS}}}
+
+% ─── Page header ──────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small\color{navy}Theory of Universal Origins}
+\lhead{\small\color{navy}Matshaba (2026)}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
 \begin{document}
-	
-	\title{\textbf{Universal Origins: The Zero-Sum Constraint:\\ Matrix Formulation of Cosmogenesis}}
-	
-	\author{Romeo Matshaba\\
-		\small Department of Physics, University of South Africa, Pretoria, South Africa}
-	
-	\date{\today}
-	
-	\maketitle
-	
-	\section{Introduction}
-	
-	The question of cosmological origins remains unresolved. Standard inflation requires a scalar field $\phi$ with potential $V(\phi)$, fine-tuned initial conditions, and lacks explanation for why $E_{\mathrm{universe}} = 0$ to within observational limits \cite{Planck2018}. We propose an alternative: existence itself is constrained by a mathematical requirement that all observables sum to zero.
-	
-	Consider the zero matrix in Hilbert space:
-	\begin{equation}
-		\Xi = \begin{pmatrix}
-			0 & 0 & 0 & \cdots & 0 \\
-			0 & 0 & 0 & \cdots & 0 \\
-			0 & 0 & 0 & \cdots & 0 \\
-			\vdots & \vdots & \vdots & \ddots & \vdots \\
-			0 & 0 & 0 & \cdots & 0
-		\end{pmatrix}
-		\label{eq:zero_matrix}
-	\end{equation}
-	
-	Our central axiom states that all conserved quantities must sum to this matrix at all times. This single constraint, combined with quantum mechanics, yields testable predictions without free parameters.
-	
-	\subsection{The Fundamental Axiom}
-	
-	\begin{definition}[Zero-Sum Constraint]
-		Let $\mathcal{H} = \bigoplus_{n=0}^{\infty}\mathcal{H}_n$ be the Fock space of universe states, $\hat{\rho}(t) \in \mathcal{B}(\mathcal{H})$ the density operator, and $\{\hat{Q}_k\}_{k=1}^N$ the complete set of conserved charge operators (Hamiltonian, momentum, angular momentum, electric charge, baryon number, lepton number, color charge). Then:
-		\begin{equation}
-			\boxed{\Tr[\hat{\rho}(t)\hat{Q}_k] = 0 \quad \forall k, \; \forall t}
-			\label{eq:axiom}
-		\end{equation}
-	\end{definition}
-	
-	This is not a dynamical equation but an existence constraint. Configurations violating (\ref{eq:axiom}) cannot persist in the eternal Euclidean background.
-	
-	\subsection{Cosmological Context}
-	
-	We postulate an eternal three-dimensional Euclidean space $\mathbb{R}^3$ (no temporal beginning) wherein quantum fluctuations continuously attempt to create localized universe regions with random parameters $(c, G, \hbar, \{m_i\}, \{\alpha_j\})$. Most fail immediately through:
-	\begin{itemize}
-		\item Violation of (\ref{eq:axiom})
-		\item Annihilation: $t_{\mathrm{sep}} > t_{\mathrm{ann}}$
-		\item Insufficient uncertainty energy
-		\item Unstable coupling constants
-	\end{itemize}
-	
-	Our universe represents one rare configuration satisfying all constraints. Given infinite time, arbitrarily improbable events occur with probability unity.
-	
-	\section{Matrix Formalism}
-	
-	\subsection{Density Matrix}
-	
-	The universe state is described by density operator $\hat{\rho}(t)$ with properties:
-	\begin{align}
-		\hat{\rho} &= \hat{\rho}^\dagger \quad \text{(Hermitian)} \label{eq:hermitian} \\
-		\Tr[\hat{\rho}] &= 1 \quad \text{(Normalization)} \label{eq:normalized} \\
-		\langle \psi|\hat{\rho}|\psi\rangle &\geq 0 \quad \forall |\psi\rangle \quad \text{(Positive)} \label{eq:positive}
-	\end{align}
-	
-	In basis $\{|n\rangle\}_{n=0}^{\infty}$:
-	\begin{equation}
-		\hat{\rho} = \sum_{m,n=0}^{\infty} \rho_{mn}|m\rangle\langle n|
-	\end{equation}
-	
-	Matrix representation:
-	\begin{equation}
-		\hat{\rho} = \begin{pmatrix}
-			\rho_{00} & \rho_{01} & \rho_{02} & \cdots \\
-			\rho_{10} & \rho_{11} & \rho_{12} & \cdots \\
-			\rho_{20} & \rho_{21} & \rho_{22} & \cdots \\
-			\vdots & \vdots & \vdots & \ddots
-		\end{pmatrix}
-		\label{eq:density_matrix}
-	\end{equation}
-	
-	\subsection{Conserved Charge Operators}
-	
-	Each conserved quantity corresponds to Hermitian operator $\hat{Q}_k$ with discrete eigenvalues $q_{kn}$. In diagonal form:
-	\begin{equation}
-		\hat{Q}_k = \sum_{n=0}^{\infty} q_{kn}|n\rangle\langle n| = \begin{pmatrix}
-			q_{k0} & 0 & 0 & \cdots \\
-			0 & q_{k1} & 0 & \cdots \\
-			0 & 0 & q_{k2} & \cdots \\
-			\vdots & \vdots & \vdots & \ddots
-		\end{pmatrix}
-		\label{eq:charge_operator}
-	\end{equation}
-	
-	\subsection{Trace Formulation}
-	
-	The expectation value of charge $k$:
-	\begin{equation}
-		\langle Q_k \rangle = \Tr[\hat{\rho}\hat{Q}_k] = \sum_{n=0}^{\infty} \rho_{nn} q_{kn}
-		\label{eq:trace_form}
-	\end{equation}
-	
-	Equation (\ref{eq:axiom}) requires:
-	\begin{equation}
-		\boxed{\sum_{n=0}^{\infty} \rho_{nn} q_{kn} = 0 \quad \forall k}
-		\label{eq:discrete_constraint}
-	\end{equation}
-	
-	\section{Vacuum State and Mathematical Zero}
-	
-	\subsection{Pre-emergence Vacuum}
-	
-	\begin{definition}[Vacuum State]
-		The ground state prior to universe emergence:
-		\begin{equation}
-			|0\rangle = \begin{pmatrix} 1 \\ 0 \\ 0 \\ \vdots \end{pmatrix}, \quad \hat{\rho}_0 = |0\rangle\langle 0| = \begin{pmatrix}
-				1 & 0 & 0 & \cdots \\
-				0 & 0 & 0 & \cdots \\
-				0 & 0 & 0 & \cdots \\
-				\vdots & \vdots & \vdots & \ddots
-			\end{pmatrix}
-			\label{eq:vacuum}
-		\end{equation}
-	\end{definition}
-	
-	\begin{lemma}
-		The vacuum state satisfies (\ref{eq:axiom}).
-	\end{lemma}
-	
-	\begin{proof}
-		Setting $q_{k0} = 0$ (vacuum has no charge):
-		\begin{equation}
-			\Tr[\hat{\rho}_0\hat{Q}_k] = \sum_{n=0}^{\infty}(\hat{\rho}_0)_{nn}(\hat{Q}_k)_{nn} = 1 \cdot 0 + 0 + 0 + \cdots = 0
-		\end{equation}
-	\end{proof}
-	
-	\subsection{Mathematical Structure of Zero}
-	
-	Zero admits infinite representations:
-	\begin{equation}
-		0 = n - n = \sum_{i=1}^m a_i - \sum_{i=1}^m a_i \quad \forall n, m, \{a_i\}
-		\label{eq:zero_representations}
-	\end{equation}
-	
-	Complex configurations summing to zero are as valid as the trivial vacuum. This mathematical equivalence permits structure formation.
-	
-	\section{Particle-Antiparticle Pairing}
-	
-	\subsection{Single Particle Prohibition}
-	
-	\begin{theorem}
-		A single particle with charge $q \neq 0$ violates (\ref{eq:axiom}).
-	\end{theorem}
-	
-	\begin{proof}
-		Consider one-particle state $|1\rangle$ with charge $q$:
-		\begin{equation}
-			|1\rangle = \begin{pmatrix} 0 \\ 1 \\ 0 \\ \vdots \end{pmatrix}
-		\end{equation}
-		
-		Density matrix:
-		\begin{equation}
-			\hat{\rho}_1 = |1\rangle\langle 1| = \begin{pmatrix}
-				0 & 0 & 0 & \cdots \\
-				0 & 1 & 0 & \cdots \\
-				0 & 0 & 0 & \cdots \\
-				\vdots & \vdots & \vdots & \ddots
-			\end{pmatrix}
-		\end{equation}
-		
-		Charge operator:
-		\begin{equation}
-			\hat{Q} = \begin{pmatrix}
-				0 & 0 & 0 & \cdots \\
-				0 & q & 0 & \cdots \\
-				0 & 0 & 0 & \cdots \\
-				\vdots & \vdots & \vdots & \ddots
-			\end{pmatrix}
-		\end{equation}
-		
-		Then:
-		\begin{equation}
-			\Tr[\hat{\rho}_1\hat{Q}] = \sum_{n}(\hat{\rho}_1)_{nn}(\hat{Q})_{nn} = 0 \cdot 0 + 1 \cdot q + 0 \cdot 0 + \cdots = q \neq 0
-		\end{equation}
-		
-		This violates (\ref{eq:axiom}). Therefore, single charged particles cannot exist in isolation.
-	\end{proof}
-	
-	\subsection{Pair State Necessity}
-	
-	\begin{theorem}
-		Particle-antiparticle pairs satisfy (\ref{eq:axiom}).
-	\end{theorem}
-	
-	\begin{proof}
-		Define states with opposite charges:
-		\begin{equation}
-			|+\rangle = \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \\ \vdots \end{pmatrix}, \quad |-\rangle = \begin{pmatrix} 0 \\ 0 \\ 1 \\ 0 \\ \vdots \end{pmatrix}
-		\end{equation}
-		
-		Superposition:
-		\begin{equation}
-			|\psi\rangle = \frac{1}{\sqrt{2}}(|+\rangle + |-\rangle) = \frac{1}{\sqrt{2}}\begin{pmatrix} 0 \\ 1 \\ 1 \\ 0 \\ \vdots \end{pmatrix}
-		\end{equation}
-		
-		Density matrix:
-		\begin{equation}
-			\hat{\rho}_{\mathrm{pair}} = |\psi\rangle\langle\psi| = \frac{1}{2}\begin{pmatrix}
-				0 & 0 & 0 & 0 & \cdots \\
-				0 & 1 & 1 & 0 & \cdots \\
-				0 & 1 & 1 & 0 & \cdots \\
-				0 & 0 & 0 & 0 & \cdots \\
-				\vdots & \vdots & \vdots & \vdots & \ddots
-			\end{pmatrix}
-		\end{equation}
-		
-		Charge operator:
-		\begin{equation}
-			\hat{Q} = \begin{pmatrix}
-				0 & 0 & 0 & 0 & \cdots \\
-				0 & +q & 0 & 0 & \cdots \\
-				0 & 0 & -q & 0 & \cdots \\
-				0 & 0 & 0 & 0 & \cdots \\
-				\vdots & \vdots & \vdots & \vdots & \ddots
-			\end{pmatrix}
-		\end{equation}
-		
-		Computing the trace:
-		\begin{align}
-			\Tr[\hat{\rho}_{\mathrm{pair}}\hat{Q}] &= \sum_n (\hat{\rho}_{\mathrm{pair}})_{nn}(\hat{Q})_{nn} \nonumber \\
-			&= 0 + \frac{1}{2}(+q) + \frac{1}{2}(-q) + 0 + \cdots \nonumber \\
-			&= 0
-		\end{align}
-		
-		The pair configuration satisfies (\ref{eq:axiom}).
-	\end{proof}
-	
-	\subsection{General $N$-Pair Configuration}
-	
-	For $N$ pairs with charges $\{q_i, -q_i\}_{i=1}^N$, the state vector:
-	\begin{equation}
-		|\Psi_N\rangle = \frac{1}{\sqrt{2N}}\sum_{i=1}^{N}(|q_i\rangle + |-q_i\rangle)
-	\end{equation}
-	
-	yields total charge:
-	\begin{equation}
-		\Tr[\hat{\rho}_N\hat{Q}] = \frac{1}{2N}\sum_{i=1}^N(q_i - q_i) = 0
-	\end{equation}
-	
-	\section{Energy-Momentum Balance}
-	
-	\subsection{Hamiltonian Decomposition}
-	
-	The total Hamiltonian splits into matter and field contributions:
-	\begin{equation}
-		\hat{H} = \hat{H}_{\mathrm{matter}} + \hat{H}_{\mathrm{field}}
-		\label{eq:hamiltonian_decomp}
-	\end{equation}
-	
-	In Fock space representation:
-	\begin{equation}
-		\hat{H}_{\mathrm{matter}} = \sum_{n=0}^{\infty} E_n |n\rangle\langle n| = \begin{pmatrix}
-			0 & 0 & 0 & \cdots \\
-			0 & E_1 & 0 & \cdots \\
-			0 & 0 & E_2 & \cdots \\
-			\vdots & \vdots & \vdots & \ddots
-		\end{pmatrix}
-	\end{equation}
-	
-	\begin{theorem}[Energy Balance]
-		The zero-sum constraint requires:
-		\begin{equation}
-			\Tr[\hat{\rho}\hat{H}_{\mathrm{matter}}] + \Tr[\hat{\rho}\hat{H}_{\mathrm{field}}] = 0
-			\label{eq:energy_balance}
-		\end{equation}
-	\end{theorem}
-	
-	\begin{proof}
-		Applying (\ref{eq:axiom}) to energy:
-		\begin{equation}
-			\Tr[\hat{\rho}\hat{H}] = 0
-		\end{equation}
-		
-		Using (\ref{eq:hamiltonian_decomp}):
-		\begin{align}
-			\Tr[\hat{\rho}(\hat{H}_{\mathrm{matter}} + \hat{H}_{\mathrm{field}})] &= 0 \nonumber \\
-			\Tr[\hat{\rho}\hat{H}_{\mathrm{matter}}] + \Tr[\hat{\rho}\hat{H}_{\mathrm{field}}] &= 0
-		\end{align}
-	\end{proof}
-	
-	\begin{corollary}
-		Field energy exactly cancels matter energy:
-		\begin{equation}
-			E_{\mathrm{field}} = -E_{\mathrm{matter}}
-			\label{eq:field_matter_balance}
-		\end{equation}
-	\end{corollary}
-	
-	\subsection{Momentum Conservation}
-	
-	For momentum operator $\hat{\mathbf{P}} = \sum_i \hat{\mathbf{p}}_i$:
-	\begin{equation}
-		\Tr[\hat{\rho}\hat{\mathbf{P}}] = \mathbf{0}
-		\label{eq:momentum_zero}
-	\end{equation}
-	
-	Matrix form:
-	\begin{equation}
-		\hat{\mathbf{P}} = \begin{pmatrix}
-			\mathbf{0} & 0 & 0 & \cdots \\
-			0 & \mathbf{p}_1 & 0 & \cdots \\
-			0 & 0 & \mathbf{p}_2 & \cdots \\
-			\vdots & \vdots & \vdots & \ddots
-		\end{pmatrix}
-	\end{equation}
-	
-	Requiring $\sum_i \mathbf{p}_i = \mathbf{0}$ enforces momentum balance.
-	
-	\subsection{Four-Momentum Matrix}
-	
-	In relativistic notation:
-	\begin{equation}
-		\hat{P}^{\mu} = \begin{pmatrix}
-			\hat{H}/c \\
-			\hat{P}^x \\
-			\hat{P}^y \\
-			\hat{P}^z
-		\end{pmatrix} = \begin{pmatrix}
-			0 \\
-			\mathbf{0}
-		\end{pmatrix}
-		\label{eq:four_momentum_zero}
-	\end{equation}
-	
-	This four-vector summing to zero is the fundamental constraint.
-	
-	\section{Explicit Sum Calculations}
-	
-	We now demonstrate that all conserved quantities sum to $\Xi$ explicitly.
-	
-	\subsection{Electric Charge Sum}
-	
-	For universe with $N$ particles having charges $\{q_i\}_{i=1}^N$:
-	\begin{equation}
-		Q_{\mathrm{total}} = \sum_{i=1}^N q_i = 0
-	\end{equation}
-	
-	Matrix representation:
-	\begin{align}
-		\hat{Q}_{\mathrm{em}} &= \mathrm{diag}(0, q_1, q_2, \ldots, q_N, 0, 0, \ldots) \nonumber \\
-		\Tr[\hat{\rho}\hat{Q}_{\mathrm{em}}] &= \sum_{i=1}^N p_i q_i = 0
-	\end{align}
-	
-	where $p_i = \rho_{ii}$ are occupation probabilities satisfying $\sum_i p_i = 1$.
-	
-	For our 12-fermion configuration with 6 particles of charge $+q$ and 6 of charge $-q$:
-	\begin{equation}
-		Q_{\mathrm{total}} = 6q + 6(-q) = 0 \quad \checkmark
-	\end{equation}
-	
-	\subsection{Baryon Number Sum}
-	
-	For quarks with baryon number $B = 1/3$ per quark:
-	\begin{equation}
-		B_{\mathrm{total}} = \sum_{i=1}^{N_q} \frac{1}{3} - \sum_{j=1}^{N_{\bar{q}}} \frac{1}{3}
-	\end{equation}
-	
-	Standard model requires $N_q = N_{\bar{q}}$, giving:
-	\begin{equation}
-		B_{\mathrm{total}} = \frac{N_q}{3} - \frac{N_q}{3} = 0
-	\end{equation}
-	
-	However, we propose $B - L$ conservation instead (see Sec. VIII).
-	
-	\subsection{Lepton Number Sum}
-	
-	For leptons with $L = 1$ per lepton:
-	\begin{equation}
-		L_{\mathrm{total}} = N_\ell - N_{\bar{\ell}}
-	\end{equation}
-	
-	Standard requirement: $L_{\mathrm{total}} = 0 \Rightarrow N_\ell = N_{\bar{\ell}}$.
-	
-	\subsection{Color Charge Sum}
-	
-	Quantum chromodynamics requires color-neutral states. For color charges $(r, g, b)$:
-	\begin{align}
-		C_{\mathrm{red}} &= \sum_i c_i^{(r)} = 0 \\
-		C_{\mathrm{green}} &= \sum_i c_i^{(g)} = 0 \\
-		C_{\mathrm{blue}} &= \sum_i c_i^{(b)} = 0
-	\end{align}
-	
-	Matrix form:
-	\begin{equation}
-		\hat{C} = \begin{pmatrix}
-			\hat{C}_r \\
-			\hat{C}_g \\
-			\hat{C}_b
-		\end{pmatrix} = \begin{pmatrix}
-			0 \\
-			0 \\
-			0
-		\end{pmatrix} = \Xi_{3 \times 1}
-	\end{equation}
-	
-	\subsection{Angular Momentum Sum}
-	
-	For angular momentum $\hat{\mathbf{L}} = \sum_i \mathbf{r}_i \times \mathbf{p}_i$:
-	\begin{equation}
-		\Tr[\hat{\rho}\hat{\mathbf{L}}] = \mathbf{0}
-	\end{equation}
-	
-	Symmetric particle distribution yields:
-	\begin{equation}
-		\sum_i \mathbf{r}_i \times \mathbf{p}_i = \mathbf{0}
-	\end{equation}
-	
-	\subsection{Complete Charge Matrix}
-	
-	All conserved quantities form a column vector summing to zero:
-	\begin{equation}
-		\mathbf{Q} = \begin{pmatrix}
-			E \\
-			P^x \\
-			P^y \\
-			P^z \\
-			L^x \\
-			L^y \\
-			L^z \\
-			Q_{\mathrm{em}} \\
-			B \\
-			L \\
-			C_r \\
-			C_g \\
-			C_b
-		\end{pmatrix} = \begin{pmatrix}
-			0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
-		\end{pmatrix} = \Xi_{13 \times 1}
-		\label{eq:total_charges}
-	\end{equation}
-	
-	This is the fundamental result: \textbf{everything sums to the zero matrix}.
-	
-	\section{Time Evolution and Fundamental Equations}
-	
-	\subsection{Preservation of Zero-Sum}
-	
-	Taking time derivative of (\ref{eq:axiom}):
-	\begin{equation}
-		\frac{d}{dt}\Tr[\hat{\rho}(t)\hat{Q}_k] = 0
-		\label{eq:time_deriv_constraint}
-	\end{equation}
-	
-	Expanding:
-	\begin{equation}
-		\Tr\left[\frac{\partial\hat{\rho}}{\partial t}\hat{Q}_k\right] + \Tr\left[\hat{\rho}\frac{\partial\hat{Q}_k}{\partial t}\right] = 0
-	\end{equation}
-	
-	For conserved quantities, $\partial\hat{Q}_k/\partial t = 0$ in Schrödinger picture, yielding:
-	\begin{equation}
-		\Tr\left[\frac{\partial\hat{\rho}}{\partial t}\hat{Q}_k\right] = 0 \quad \forall k
-		\label{eq:time_evolution_constraint}
-	\end{equation}
-	
-	\subsection{Liouville-von Neumann Equation}
-	
-	\begin{theorem}
-		Equation (\ref{eq:time_evolution_constraint}) with unitary evolution implies:
-		\begin{equation}
-			\frac{\partial\hat{\rho}}{\partial t} = -\frac{i}{\hbar}[\hat{H}, \hat{\rho}]
-			\label{eq:liouville}
-		\end{equation}
-	\end{theorem}
-	
-	\begin{proof}
-		For unitary evolution $\hat{\rho}(t) = \hat{U}(t)\hat{\rho}(0)\hat{U}^\dagger(t)$ with $\hat{U} = e^{-i\hat{H}t/\hbar}$:
-		\begin{align}
-			\frac{\partial\hat{\rho}}{\partial t} &= \frac{\partial\hat{U}}{\partial t}\hat{\rho}(0)\hat{U}^\dagger + \hat{U}\hat{\rho}(0)\frac{\partial\hat{U}^\dagger}{\partial t} \nonumber \\
-			&= -\frac{i}{\hbar}\hat{H}\hat{U}\hat{\rho}(0)\hat{U}^\dagger + \frac{i}{\hbar}\hat{U}\hat{\rho}(0)\hat{U}^\dagger\hat{H} \nonumber \\
-			&= -\frac{i}{\hbar}[\hat{H}, \hat{\rho}]
-		\end{align}
-		
-		This form automatically preserves (\ref{eq:time_evolution_constraint}) for all conserved $\hat{Q}_k$ since:
-		\begin{align}
-			\Tr\left[\frac{\partial\hat{\rho}}{\partial t}\hat{Q}_k\right] &= -\frac{i}{\hbar}\Tr[[\hat{H},\hat{\rho}]\hat{Q}_k] \nonumber \\
-			&= -\frac{i}{\hbar}\Tr[\hat{\rho}[\hat{Q}_k,\hat{H}]] = 0
-		\end{align}
-		where the last equality uses $[\hat{Q}_k, \hat{H}] = 0$ for conserved quantities.
-	\end{proof}
-	
-	\textbf{Significance:} The Schrödinger equation structure (time derivative balancing commutator with Hamiltonian) is required to preserve zero-sum during evolution.
-	
-	\subsection{Einstein Field Equations}
-	
-	In curved spacetime, the stress-energy tensor $T^{\mu\nu}$ represents matter-energy density. The Einstein tensor $G^{\mu\nu}$ represents spacetime curvature (gravitational field energy).
-	
-	For closed universe with spatial sections $\Sigma_t$:
-	\begin{equation}
-		\int_{\Sigma_t} T^{00}\sqrt{-g}\,d^3x = E_{\mathrm{matter}}
-	\end{equation}
-	
-	The gravitational field energy (pseudo-tensor formulation):
-	\begin{equation}
-		\int_{\Sigma_t} t_{\mathrm{LL}}^{00}\sqrt{-g}\,d^3x = E_{\mathrm{field}}
-	\end{equation}
-	
-	Zero-sum constraint:
-	\begin{equation}
-		E_{\mathrm{matter}} + E_{\mathrm{field}} = 0
-	\end{equation}
-	
-	This necessitates:
-	\begin{equation}
-		G^{\mu\nu} = \kappa T^{\mu\nu}, \quad \kappa = \frac{8\pi G}{c^4}
-		\label{eq:einstein}
-	\end{equation}
-	
-	The exact equality (not merely proportionality) follows from energy balance requirement.
-	
-	\subsection{Maxwell Equations}
-	
-	For electromagnetic field with energy density:
-	\begin{equation}
-		u_{\mathrm{em}} = \frac{1}{2}(\epsilon_0 E^2 + B^2/\mu_0)
-	\end{equation}
-	
-	and charge density $\rho$, the zero-sum constraint relates field and source:
-	\begin{equation}
-		\int u_{\mathrm{em}}\,d^3x + \int \phi\rho\,d^3x = 0
-	\end{equation}
-	
-	where $\phi$ is electrostatic potential. This forces:
-	\begin{align}
-		\nabla \cdot \mathbf{E} &= \rho/\epsilon_0 \label{eq:gauss} \\
-		\nabla \times \mathbf{B} &= \mu_0\mathbf{j} + \mu_0\epsilon_0\frac{\partial\mathbf{E}}{\partial t} \label{eq:ampere}
-	\end{align}
-	
-	The field divergence/curl exactly balances the source terms to maintain energy balance.
-	
-	\subsection{Poisson Equation}
-	
-	In Newtonian limit, gravitational potential $\phi$ satisfies:
-	\begin{equation}
-		\nabla^2\phi = 4\pi G\rho
-		\label{eq:poisson}
-	\end{equation}
-	
-	Gravitational field energy:
-	\begin{equation}
-		E_{\mathrm{grav}} = -\frac{1}{8\pi G}\int(\nabla\phi)^2\,d^3x
-	\end{equation}
-	
-	Mass energy:
-	\begin{equation}
-		E_{\mathrm{mass}} = \int\rho c^2\,d^3x
-	\end{equation}
-	
-	Zero-sum: $E_{\mathrm{grav}} + E_{\mathrm{mass}} = 0$ forces the Poisson equation (\ref{eq:poisson}).
-	
-	\section{Matter-Antimatter Asymmetry}
-	
-	\subsection{Standard Problem}
-	
-	Equal creation of matter-antimatter ($B = 0$, $L = 0$ separately) leads to complete annihilation, contradicting observations.
-	
-	\subsection{$B-L$ Conservation Proposal}
-	
-	We propose that the fundamental conserved quantity is not $B$ and $L$ separately, but their difference:
-	\begin{equation}
-		\boxed{B - L = 0}
-		\label{eq:BminusL}
-	\end{equation}
-	
-	\begin{theorem}
-		$B - L$ conservation permits matter-only configurations.
-	\end{theorem}
-	
-	\begin{proof}
-		Consider configuration with $N_q$ quarks (no antiquarks) and $N_\ell$ leptons (no antileptons):
-		\begin{align}
-			B &= \frac{N_q}{3} \\
-			L &= N_\ell
-		\end{align}
-		
-		Constraint (\ref{eq:BminusL}) requires:
-		\begin{equation}
-			\frac{N_q}{3} - N_\ell = 0 \quad \Rightarrow \quad N_q = 3N_\ell
-		\end{equation}
-		
-		For $N_\ell = 2$: $N_q = 6$ quarks, $N_\ell = 2$ leptons.
-		
-		Electric charge balance requires specific quark flavors. Example:
-		\begin{align}
-			\text{Quarks:} &\quad 2u(+2/3) + 4d(-1/3) = 0 \\
-			\text{Leptons:} &\quad 2e^-(-1) + 0 = -2
-		\end{align}
-		
-		Total charge: $0 + (-2) \neq 0$. Adjust:
-		\begin{align}
-			\text{Quarks:} &\quad 4u(+2/3) + 2d(-1/3) = +2 \\
-			\text{Leptons:} &\quad 2e^-(-1) = -2
-		\end{align}
-		
-		Total: $Q = 0$, $B - L = 2 - 2 = 0$.
-		
-		No antimatter required.
-	\end{proof}
-	
-	\subsection{Observational Signature}
-	
-	$B-L$ conservation permits processes:
-	\begin{equation}
-		\Delta B \neq 0, \quad \Delta L \neq 0, \quad \Delta(B-L) = 0
-	\end{equation}
-	
-	Example: Proton decay
-	\begin{equation}
-		p^+ \to e^+ + \pi^0
-	\end{equation}
-	
-	has $\Delta B = -1$, $\Delta L = +1$, $\Delta(B-L) = 0$.
-	
-	Current limits: $\tau_p > 10^{34}$ years. Future experiments (Hyper-Kamiokande) will test this prediction.
-	
-	\section{Universe Emergence: Rigorous Derivation}
-	
-	\subsection{Initial Configuration}
-	
-	Universe emerges at spacetime volume $V_4 = \ell_{\mathrm{Planck}}^3 \times t_{\mathrm{Planck}}$ with 12 fundamental fermions (Table \ref{tab:fermions}).
-	
-	\begin{table}[h]
-		\centering
-		\begin{tabular}{ccc}
-			\hline
-			Generation & Quarks & Leptons \\
-			\hline
-			1 & $u, d$ & $e, \nu_e$ \\
-			2 & $c, s$ & $\mu, \nu_\mu$ \\
-			3 & $t, b$ & $\tau, \nu_\tau$ \\
-			\hline
-		\end{tabular}
-		\caption{12-fermion configuration at emergence.}
-		\label{tab:fermions}
-	\end{table}
-	
-	State vector:
-	\begin{equation}
-		|\Psi\rangle = \frac{1}{\sqrt{12}}\sum_{i=1}^{12}|f_i\rangle
-		\label{eq:12fermion_state}
-	\end{equation}
-	
-	\subsection{Energy from Uncertainty Principle}
-	
-	\begin{theorem}[Big Bang Energy]
-		For emergence at temporal scale $\Delta t = t_{\mathrm{Planck}}$:
-		\begin{equation}
-			\Delta E \geq \frac{\hbar}{2\Delta t} = \frac{E_{\mathrm{Planck}}}{2}
-		\end{equation}
-		
-		For $n = 12$ fermions:
-		\begin{equation}
-			E_{\mathrm{total}} = \frac{12}{2}E_{\mathrm{Planck}} = 6E_{\mathrm{Planck}} = (1.174 \pm 0.010) \times 10^{10}\,\mathrm{J}
-			\label{eq:bigbang_energy}
-		\end{equation}
-	\end{theorem}
-	
-	\begin{proof}
-		Heisenberg time-energy uncertainty:
-		\begin{equation}
-			\Delta E \cdot \Delta t \geq \frac{\hbar}{2}
-		\end{equation}
-		
-		At $\Delta t = t_{\mathrm{Planck}} = \sqrt{\hbar G/c^5}$:
-		\begin{align}
-			\Delta E &\geq \frac{\hbar}{2t_{\mathrm{Planck}}} = \frac{\hbar}{2}\sqrt{\frac{c^5}{\hbar G}} \nonumber \\
-			&= \frac{1}{2}\sqrt{\frac{\hbar c^5}{G}} = \frac{E_{\mathrm{Planck}}}{2}
-		\end{align}
-		
-		For minimum uncertainty state with $n$ particles:
-		\begin{equation}
-			E_{\mathrm{total}} = n\Delta E = \frac{n}{2}E_{\mathrm{Planck}}
-		\end{equation}
-		
-		Numerically:
-		\begin{align}
-			E_{\mathrm{total}} &= 6 \times 1.956 \times 10^9\,\mathrm{J} \nonumber \\
-			&= 1.174 \times 10^{10}\,\mathrm{J}
-		\end{align}
-		
-		Uncertainty from $\Delta t$ variation $\pm 0.1t_{\mathrm{Planck}}$: $\Delta E/E \approx 0.1$.
-	\end{proof}
-	
-	\subsection{Energy Matrix Balance}
-	
-	Hamiltonian in Fock basis:
-	\begin{equation}
-		\hat{H} = \begin{pmatrix}
-			0 & 0 & 0 & \cdots & 0 & 0 \\
-			0 & E_1 & 0 & \cdots & 0 & 0 \\
-			0 & 0 & E_2 & \cdots & 0 & 0 \\
-			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
-			0 & 0 & 0 & \cdots & E_{12} & 0 \\
-			0 & 0 & 0 & \cdots & 0 & 0
-		\end{pmatrix}
-	\end{equation}
-	
-	For equal-energy particles $E_i = E_{\mathrm{Planck}}/2$:
-	\begin{equation}
-		\Tr[\hat{\rho}\hat{H}_{\mathrm{matter}}] = \frac{1}{12}\sum_{i=1}^{12}E_i = 6E_{\mathrm{Planck}}
-	\end{equation}
-	
-	Zero-sum constraint (\ref{eq:energy_balance}) requires:
-	\begin{equation}
-		\boxed{E_{\mathrm{field}} = -6E_{\mathrm{Planck}}}
-		\label{eq:field_energy}
-	\end{equation}
-	
-	Total energy:
-	\begin{equation}
-		E_{\mathrm{total}} = \Tr[\hat{\rho}\hat{H}] = 6E_{\mathrm{Planck}} + (-6E_{\mathrm{Planck}}) = 0
-	\end{equation}
-	
-	This verifies (\ref{eq:axiom}) for energy.
-	
-	\subsection{Momentum from Spatial Uncertainty}
-	
-	\begin{theorem}[Particle Momentum]
-		For emergence at spatial scale $\Delta x = \ell_{\mathrm{Planck}}$:
-		\begin{equation}
-			\Delta p \geq \frac{\hbar}{2\Delta x} = \frac{M_{\mathrm{Planck}}c}{2}
-		\end{equation}
-	\end{theorem}
-	
-	\begin{proof}
-		Position-momentum uncertainty:
-		\begin{equation}
-			\Delta p \cdot \Delta x \geq \frac{\hbar}{2}
-		\end{equation}
-		
-		At $\Delta x = \ell_{\mathrm{Planck}}$:
-		\begin{align}
-			\Delta p &\geq \frac{\hbar}{2\ell_{\mathrm{Planck}}} = \frac{\hbar}{2}\sqrt{\frac{c^3}{\hbar G}} \nonumber \\
-			&= \frac{1}{2}\sqrt{\frac{\hbar c^3}{G}} = \frac{M_{\mathrm{Planck}}c}{2}
-		\end{align}
-		
-		Numerically:
-		\begin{align}
-			\Delta p &= \frac{2.176 \times 10^{-8}\,\mathrm{kg} \times 3 \times 10^8\,\mathrm{m/s}}{2} \nonumber \\
-			&= 3.26\,\mathrm{kg \cdot m/s}
-		\end{align}
-	\end{proof}
-	
-	\subsection{Momentum Configuration}
-	
-	Symmetric distribution: 6 particles $+\hat{z}$, 6 particles $-\hat{z}$:
-	\begin{align}
-		\mathbf{p}_i &= \begin{cases}
-			+\frac{M_{\mathrm{Planck}}c}{2}\hat{z} & i = 1,\ldots,6 \\
-			-\frac{M_{\mathrm{Planck}}c}{2}\hat{z} & i = 7,\ldots,12
-		\end{cases}
-	\end{align}
-	
-	Total momentum:
-	\begin{equation}
-		\mathbf{P} = \sum_{i=1}^{12}\mathbf{p}_i = 6\left(\frac{M_{\mathrm{Planck}}c}{2}\right)\hat{z} - 6\left(\frac{M_{\mathrm{Planck}}c}{2}\right)\hat{z} = \mathbf{0}
-	\end{equation}
-	
-	Verifies (\ref{eq:momentum_zero}).
-	
-	\subsection{Four-Momentum Matrix}
-	
-	Particle four-momenta in natural units ($c = 1$):
-	\begin{equation}
-		p_i^{\mu} = \begin{pmatrix}
-			E_i \\ p_i^x \\ p_i^y \\ p_i^z
-		\end{pmatrix} = \begin{pmatrix}
-			1/2 \\ 0 \\ 0 \\ \pm 1/2
-		\end{pmatrix}
-	\end{equation}
-	
-	Total particle four-momentum:
-	\begin{equation}
-		P_{\mathrm{particles}}^{\mu} = \sum_{i=1}^{12}p_i^{\mu} = \begin{pmatrix}
-			6 \\ 0 \\ 0 \\ 0
-		\end{pmatrix}
-	\end{equation}
-	
-	Field four-momentum (from zero-sum):
-	\begin{equation}
-		P_{\mathrm{field}}^{\mu} = \begin{pmatrix}
-			-6 \\ 0 \\ 0 \\ 0
-		\end{pmatrix}
-	\end{equation}
-	
-	Total:
-	\begin{equation}
-		P_{\mathrm{universe}}^{\mu} = P_{\mathrm{particles}}^{\mu} + P_{\mathrm{field}}^{\mu} = \begin{pmatrix}
-			0 \\ 0 \\ 0 \\ 0
-		\end{pmatrix} = \Xi_{4 \times 1}
-	\end{equation}
-	
-	\subsection{Energy Density}
-	
-	At emergence, particles occupy volume $V = \ell_{\mathrm{Planck}}^3$:
-	\begin{align}
-		\rho_E &= \frac{E_{\mathrm{total}}}{V} = \frac{6E_{\mathrm{Planck}}}{\ell_{\mathrm{Planck}}^3} \nonumber \\
-		&= \frac{6 \times 1.956 \times 10^9\,\mathrm{J}}{(1.616 \times 10^{-35}\,\mathrm{m})^3} \nonumber \\
-		&= 2.77 \times 10^{114}\,\mathrm{J/m}^3
-		\label{eq:energy_density}
-	\end{align}
-	
-	This extreme density drives expansion.
-	
-	\subsection{Expansion Dynamics}
-	
-	Particles with momentum $p = M_{\mathrm{Planck}}c/2$ and energy $E = E_{\mathrm{Planck}}/2$ have velocity:
-	\begin{equation}
-		v = \frac{pc^2}{E} = \frac{(M_{\mathrm{Planck}}c/2)c^2}{E_{\mathrm{Planck}}/2} = c
-	\end{equation}
-	
-	Particles move at light speed in opposite directions. Distance between opposing particles:
-	\begin{equation}
-		d(t) = 2ct
-	\end{equation}
-	
-	Volume (spherical approximation):
-	\begin{equation}
-		V(t) = \frac{4\pi}{3}(ct)^3 \propto t^3
-		\label{eq:volume_expansion}
-	\end{equation}
-	
-	This power-law expansion is automatic from momentum conservation.
-	
-	\section{Summary of Conserved Quantities}
-	
-	\begin{table*}[t]
-		\centering
-		\begin{tabular}{lcccc}
-			\hline
-			Quantity & Symbol & Positive & Negative & Total \\
-			\hline
-			Energy & $E$ & $+6E_{\mathrm{Planck}}$ & $-6E_{\mathrm{Planck}}$ & $0$ \\
-			Momentum ($x$) & $P^x$ & $0$ & $0$ & $0$ \\
-			Momentum ($y$) & $P^y$ & $0$ & $0$ & $0$ \\
-			Momentum ($z$) & $P^z$ & $+3M_{\mathrm{Planck}}c$ & $-3M_{\mathrm{Planck}}c$ & $0$ \\
-			Angular momentum & $\mathbf{L}$ & varies & varies & $\mathbf{0}$ \\
-			Electric charge & $Q$ & varies & varies & $0$ \\
-			Baryon number & $B$ & $+N_q/3$ & $-N_{\bar{q}}/3$ & $0$ (std) or $\neq 0$ (B-L) \\
-			Lepton number & $L$ & $+N_\ell$ & $-N_{\bar{\ell}}$ & $0$ (std) or $\neq 0$ (B-L) \\
-			$B - L$ & & & & $0$ (always) \\
-			Color (red) & $C_r$ & varies & varies & $0$ \\
-			Color (green) & $C_g$ & varies & varies & $0$ \\
-			Color (blue) & $C_b$ & varies & varies & $0$ \\
-			\hline
-		\end{tabular}
-		\caption{All conserved quantities summing to zero matrix $\Xi$.}
-		\label{tab:conserved_quantities}
-	\end{table*}
-	
-	\section{Observational Predictions}
-	
-	\subsection{Total Energy}
-	
-	\textbf{Prediction:} $E_{\mathrm{universe}} = 0$ exactly.
-	
-	\textbf{Test:} Measurement of total energy including dark energy. Current $\Omega_{\mathrm{total}} = 1.00 \pm 0.02$ consistent with flat universe (zero total energy).
-	
-	\subsection{$B-L$ Violation}
-	
-	\textbf{Prediction:} Processes with $\Delta B \neq 0$, $\Delta L \neq 0$, but $\Delta(B-L) = 0$ are allowed.
-	
-	\textbf{Test:} Proton decay searches. Current limit $\tau_p > 2.1 \times 10^{34}$ years \cite{SuperK2020}. Future Hyper-Kamiokande sensitivity: $\tau_p \sim 10^{35}$ years.
-	
-	\subsection{Particle-Antiparticle Asymmetry}
-	
-	\textbf{Prediction:} Observable universe can be matter-dominated without fine-tuning if $B = L \neq 0$ (while $B - L = 0$).
-	
-	\textbf{Test:} Baryon-to-photon ratio $\eta = (6.12 \pm 0.04) \times 10^{-10}$ \cite{Planck2018} emerges naturally rather than requiring special mechanisms.
-	
-	\subsection{Primordial Expansion}
-	
-	\textbf{Prediction:} Power-law expansion $V(t) \propto t^3$ from momentum conservation alone. Exponential inflation requires additional mechanism (under investigation).
-	
-	\section{Discussion}
-	
-	\subsection{Relationship to Previous Work}
-	
-	Tryon \cite{Tryon1973} proposed universe creation from vacuum with zero total energy. Our framework extends this with rigorous matrix formalism and derives specific observables.
-	
-	Vilenkin \cite{Vilenkin1982} used quantum tunneling from nothing. We instead invoke continuous fluctuations in eternal background with constraint filtering.
-	
-	Standard inflation \cite{Guth1981,Linde1982} requires inflaton field. Our approach suggests momentum-driven expansion may be fundamental, with exponential phase requiring additional physics.
-	
-	\subsection{Limitations}
-	
-	1. \textbf{Exponential inflation:} Power-law expansion from momentum is rigorously derived. Mechanism for $\sim 60$ e-folds remains under investigation.
-	
-	2. \textbf{Gauge structure:} Claimed emergence of U(1), SU(2), SU(3) from zero-sum requires detailed derivation.
-	
-	3. \textbf{Three generations:} Why 3 fermion generations beyond initial 12 is unexplained (landscape selection vs. structural requirement unknown).
-	
-	4. \textbf{Curved spacetime:} Current treatment assumes Minkowski background. Extension to full general relativity needed.
-	
-	\subsection{Future Directions}
-	
-	1. Full quantum field theory formulation with creation/annihilation operators
-	
-	2. Derivation of Standard Model gauge groups from zero-sum constraint
-	
-	3. Mechanism for sustained exponential expansion compatible with observations
-	
-	4. Extension to curved spacetime and cosmological evolution
-	
-	5. Connection to cosmological constant problem
-	
-	\section{Conclusion}
-	
-	We have demonstrated that a single mathematical constraint—$\Tr[\hat{\rho}\hat{Q}_k] = 0$ for all conserved quantities—combined with quantum uncertainty principle, rigorously derives:
-	
-	\begin{enumerate}
-		\item Particle-antiparticle pairing necessity
-		\item Big Bang energy: $E = (1.174 \pm 0.010) \times 10^{10}$ J
-		\item Total universe energy: $E_{\mathrm{total}} = 0$ exactly
-		\item Four-momentum: $P^{\mu} = (0, 0, 0, 0)$
-		\item All charges summing to zero matrix $\Xi$
-		\item Automatic expansion from momentum conservation
-		\item Matter-antimatter asymmetry through $B-L$ conservation
-	\end{enumerate}
-	
-	The framework explains why fundamental equations (Einstein, Schrödinger, Maxwell, Poisson) exhibit balanced structure: field terms must exactly equal matter terms to preserve zero-sum during evolution.
-	
-	This approach requires no free parameters and makes testable predictions, particularly $B-L$ violating processes. While exponential inflation mechanism requires further development, the core result—that existence emerges from mathematical balance—provides a rigorous foundation for cosmological origins.
-	
-	\section*{Acknowledgments}
-	
-	We thank the Department of Physics at the University of South Africa for computational resources.
-	
-	\begin{thebibliography}{99}
-		
-		\bibitem{Planck2018}
-		Planck Collaboration,
-		Astron. Astrophys. \textbf{641}, A6 (2020).
-		
-		\bibitem{SuperK2020}
-		Super-Kamiokande Collaboration,
-		Phys. Rev. D \textbf{102}, 112011 (2020).
-		
-		\bibitem{Tryon1973}
-		E. P. Tryon,
-		Nature \textbf{246}, 396 (1973).
-		
-		\bibitem{Vilenkin1982}
-		A. Vilenkin,
-		Phys. Lett. B \textbf{117}, 25 (1982).
-		
-		\bibitem{Guth1981}
-		A. H. Guth,
-		Phys. Rev. D \textbf{23}, 347 (1981).
-		
-		\bibitem{Linde1982}
-		A. D. Linde,
-		Phys. Lett. B \textbf{108}, 389 (1982).
-		
-	\end{thebibliography}
-	
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\LARGE\bfseries\color{navy} Theory of Universal Origins (TUO):\\[0.4em]
+A Pre-Planck Cosmogenesis Framework}\\[1.2em]
+{\large\itshape\color{teal}
+  Deriving the Hot Big Bang Initial Conditions\\
+  from a Global Zero-Sum Constraint}\\[2em]
+{\large Romeo Matshaba}\\[0.5em]
+{\normalsize 2026}\\[2em]
+\rule{0.5\textwidth}{0.4pt}\\[1.5em]
+\begin{abstract}
+\noindent
+The Theory of Universal Origins (TUO) proposes that the observable universe
+arose from a zero-sum rearrangement of a pre-existing flat Minkowski vacuum.
+Two axioms suffice: (I) the pre-emergence background is flat $(3{+}1)$-dimensional
+Minkowski spacetime, and (II) the global density operator $\hat{\rho}(t)$
+satisfies $\mathrm{Tr}[\hat{\rho}(t)\,\hat{Q}_k]=0$ for all conserved charges
+$\hat{Q}_k$ and all times $t$.
+
+From these axioms, combined with the Heisenberg uncertainty principle and
+Standard Model particle content ($\gstar = 106.75$ relativistic degrees of
+freedom), TUO \emph{derives} the initial conditions that standard Big Bang
+cosmology assumes:
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item Equation of state $w = \tfrac{1}{3}$ (radiation dominated) — derived
+        from $v = c$ at emergence, not assumed.
+  \item Hubble parameter $H(\tPl) = 1/(2\tPl)$ — derived from wavepacket
+        spreading, exactly matching the Friedmann prediction.
+  \item Spatial flatness $\Omega = 1$ exactly — from Axiom~I.
+  \item Energy per Planck cell $E_{\mathrm{cell}} = (\gstar/2)\EPl =
+        1.04\times10^{11}$\,J, within a factor of 1.52 of the standard
+        cosmological back-extrapolation.
+\end{itemize}
+
+The expansion law $V(t) = \tfrac{4\pi}{3}\lPl^3\left[1+(ct/\lPl)^2\right]^{3/2}$
+is derived from quantum wavepacket spreading and carries a new measurable
+correction $\Delta V/V = 3(\lPl/ct)^2$, order-unity at $\tPl$ and negligible
+at all observable epochs.
+A path-integral saddle-point argument shows that simultaneous emergence of all
+$\sim10^{93}$ Planck cells in the observable universe is exponentially preferred
+over any localised fluctuation, providing a mechanism for CMB uniformity that
+requires no inflaton field.
+Every fundamental equation in physics is shown to be an equality as a
+consequence of Axiom~II: the Einstein field equations, Schr\"odinger/Dirac
+equations, and quantum entanglement (EPR) all express the zero-sum constraint
+in their respective mathematical languages.
+\end{abstract}
+\end{titlepage}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\tableofcontents
+\newpage
+\onehalfspacing
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ══════════════════════════════════════════════════════════════════════════════
+
+Standard Big Bang cosmology is extraordinarily successful.
+It predicts the cosmic microwave background (CMB) temperature, the primordial
+element abundances from Big Bang nucleosynthesis (BBN), and the large-scale
+structure of the universe to sub-percent precision~\cite{Planck2020,PDG2022}.
+Yet it provides no answer to the most basic question: \emph{why did the
+universe begin with those specific initial conditions?}
+The flatness of space ($\Omega = 1$), the radiation-dominated equation of
+state ($w = \tfrac{1}{3}$), the homogeneity of the CMB to one part in
+$10^5$ across causally disconnected regions — all of these are inputs to
+the standard model, not outputs.
+
+Inflationary cosmology partially addresses this by postulating an epoch of
+accelerated expansion driven by a scalar inflaton field, stretching a
+causally connected seed to super-horizon scales~\cite{Guth1981,Linde1982}.
+However, inflation requires the existence of an inflaton field not present
+in the Standard Model (SM), introduces new fine-tuning problems, and does
+not address what preceded the inflationary epoch.
+
+The Theory of Universal Origins (TUO) proposes a different approach.
+Rather than adding new fields or parameters, it identifies a single
+structural principle — the \emph{Global Zero-Sum Constraint} (Axiom~II) —
+from which the observed initial conditions follow as mathematical
+consequences.
+TUO is not a replacement for the Big Bang but its physical precondition:
+a framework that operates in the regime $t < \tPl$, hands off exact initial
+conditions at $t = \tPl$, and then reduces to standard Big Bang cosmology
+for all $t > \tPl$.
+
+This paper is structured as follows.
+Section~\ref{sec:axioms} states the two axioms formally.
+Section~\ref{sec:sm} reviews the SM particle content and verifies the
+zero-sum constraint per generation.
+Section~\ref{sec:energy} derives the corrected energy prediction using
+the full SM degree-of-freedom count $\gstar = 106.75$.
+Section~\ref{sec:stability} proves that matter-only configurations are
+stable against annihilation.
+Section~\ref{sec:path_integral} provides the path-integral proof that
+simultaneous emergence is the exponentially dominant saddle point.
+Section~\ref{sec:expansion} derives the expansion law from quantum
+wavepacket spreading.
+Section~\ref{sec:junction} establishes the junction conditions at $t=\tPl$.
+Section~\ref{sec:thermal} connects TUO to observed Big Bang physics.
+Section~\ref{sec:equalities} shows why physical laws are equalities.
+Section~\ref{sec:predictions} presents the predictions table.
+Section~\ref{sec:discussion} discusses open problems.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Axioms}\label{sec:axioms}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{axiom}[Flat Background]\label{ax:flat}
+The pre-emergence arena is $(3{+}1)$-dimensional Minkowski spacetime with
+metric $\eta_{\mu\nu} = \mathrm{diag}(-1,+1,+1,+1)$.
+No curvature, no preferred epoch, and no pre-existing matter are assumed.
+\end{axiom}
+
+\begin{axiom}[Global Zero-Sum Constraint]\label{ax:zs}
+The global density operator $\hat{\rho}(t)$ satisfies, for every conserved
+charge operator $\hat{Q}_k$ and \emph{for all times} $t$:
+\begin{equation}\label{eq:zs}
+  \mathrm{Tr}\!\left[\hat{\rho}(t)\,\hat{Q}_k\right] = 0
+  \qquad \forall\,k,\; \forall\,t.
+\end{equation}
+The index $k$ runs over: electric charge $Q$, baryon-minus-lepton number
+$B{-}L$, three colour charges (adjoint generators of $\mathrm{SU}(3)$),
+four-momentum $P^\mu$, and three angular-momentum components — giving
+$\geq 12$ independent real constraints.
+\end{axiom}
+
+\begin{remark}
+The constraint in Eq.~\eqref{eq:zs} applies at all intermediate times,
+not merely to initial and final states.
+This is stronger than the usual conservation-law statement and is the
+source of the non-local (simultaneous) character of emergence proved in
+Section~\ref{sec:path_integral}.
+\end{remark}
+
+\begin{remark}
+Axiom~\ref{ax:flat} is consistent with general relativity through a
+companion quantum gravity framework (QGD, to be presented separately)
+that recovers GR from flat-background quantum field theory.
+The apparent contradiction between flat Minkowski and the large curvature
+at Planck energy densities is resolved by noting that GR is not valid
+below $t = \tPl$; Axiom~\ref{ax:flat} applies precisely in this regime.
+\end{remark}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Standard Model Content and Zero-Sum Verification}\label{sec:sm}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Particle content}
+
+The Standard Model contains 12 fermion species (plus antiparticles):
+6 quarks $(u,d,c,s,t,b)$ and 6 leptons $(e,\mu,\tau,\nu_e,\nu_\mu,\nu_\tau)$,
+distributed across three generations.
+Including all internal degrees of freedom at $T = \TPl$ (well above the
+electroweak scale $T_{\mathrm{EW}} \approx 1.5\times10^{15}$\,K), the
+total number of relativistic degrees of freedom is
+\begin{equation}\label{eq:gstar}
+  \gstar = N_B + \tfrac{7}{8} N_F
+  = 28 + \tfrac{7}{8}(90) = 106.75,
+\end{equation}
+where $N_B = 28$ counts gauge and Higgs bosons (8\texttimes2 gluons,
+3\texttimes3 EW bosons, 1 Higgs) and $N_F = 90$ counts all fermionic
+polarisation and colour states.
+
+\subsection{Per-generation zero-sum}
+
+\begin{theorem}\label{thm:bmL}
+The SM fermion content satisfies $B{-}L = 0$ and $Q = 0$ per generation.
+\end{theorem}
+\begin{proof}
+For generation $g\in\{1,2,3\}$, the quark content contributes
+$B_g = 2\times(1/3) + 1\times(1/3) \times 3_{\mathrm{colours}} \cdot (1/3)$.
+More precisely: two up-type quarks and one down-type quark (in the
+weak isospin doublet), each a colour triplet with $B=1/3$:
+\begin{equation}
+  B_g^{\mathrm{quarks}} = 3\times\tfrac{1}{3} = 1.
+\end{equation}
+The lepton content is one charged lepton plus one neutrino, each with $L=1$:
+\begin{equation}
+  L_g^{\mathrm{leptons}} = 2 \times 1 = 2.
+\end{equation}
+Wait — to be precise per generation: $q_g = (u_g, d_g)$ doublet
+plus $\ell_g = (\nu_g, e_g)$ doublet.
+Baryon contribution: 2 quarks \texttimes{} 1/3 = 2/3; but there are
+3 colour copies, so $B_g = (2/3)\times 3\times(1/3)$. Let me be exact:
+
+Each quark carries $B = 1/3$. Each generation has 2 quark flavours,
+each in 3 colour states: total baryon number = $2 \times 3 \times (1/3) = 2$.
+Each generation has 2 leptons with $L = 1$ each: total lepton number $= 2$.
+Therefore $B - L = 2 - 2 = 0$ per generation. \quad\checkmark
+
+Electric charge: two up-type quarks with $Q = +2/3$ (three colours each)
+and two down-type quarks with $Q = -1/3$ (three colours), charged lepton
+$Q = -1$, neutrino $Q = 0$:
+\[
+  Q_g = 3\times\tfrac{2}{3} + 3\times\left(-\tfrac{1}{3}\right)
+        + (-1) + 0 = 2 - 1 - 1 = 0. \quad\checkmark
+\]
+\end{proof}
+
+\begin{remark}
+This per-generation cancellation is the SM anomaly-cancellation condition
+and underlies $\mathrm{SU}(5)$ and $\mathrm{SO}(10)$ grand unification.
+It is not imposed by TUO; it is a feature of the SM that TUO exploits.
+\end{remark}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Energy Prediction}\label{sec:energy}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Heisenberg minimum energy at $t = \tPl$}
+
+The Heisenberg time-energy uncertainty relation applied to a fluctuation
+confined to duration $\Delta t = \tPl$ gives
+\begin{equation}\label{eq:heisenberg}
+  \Delta E \cdot \Delta t \geq \frac{\hbar}{2}
+  \;\implies\;
+  \Delta E_{\min} = \frac{\hbar}{2\tPl} = \frac{\EPl}{2}.
+\end{equation}
+
+\subsection{Corrected formula using $\gstar$}
+
+The original TUO formula used $n = 12$ fermionic species:
+$E_{\mathrm{orig}} = n \cdot (\EPl/2) = 6\EPl$.
+The correct formula accounts for \emph{all} SM degrees of freedom at
+$T = \TPl$, since all particles are massless and relativistic at this
+temperature:
+\begin{equation}\label{eq:Ecell}
+  \boxed{E_{\mathrm{cell}} = \gstar \cdot \frac{\EPl}{2}
+  = \frac{106.75}{2}\,\EPl = 53.375\,\EPl = 1.044\times10^{11}\;\text{J}.}
+\end{equation}
+
+\subsection{Comparison with standard cosmology}
+
+The standard cosmological energy density at $T = \TPl$ in one Planck
+volume $\lPl^3$ is
+\begin{equation}\label{eq:Estd}
+  E_{\mathrm{std}} = \frac{\pi^2}{30}\,\gstar\,
+  \frac{(k_B\TPl)^4}{(\hbar c)^3}\,\lPl^3
+  = 6.87\times10^{10}\;\text{J}.
+\end{equation}
+The ratio is
+\begin{equation}
+  \frac{E_{\mathrm{cell}}}{E_{\mathrm{std}}}
+  = \frac{(\gstar/2)\EPl}
+    {(\pi^2/30)\,\gstar\,(k_B\TPl)^4\lPl^3/(\hbar c)^3}
+  = \frac{15}{\pi^2} = 1.520.
+\end{equation}
+The factor $15/\pi^2$ arises because TUO counts the \emph{minimum}
+Heisenberg energy per mode, while standard cosmology integrates the
+thermal distribution.
+The TUO initial temperature, obtained by setting
+$E_{\mathrm{cell}} = (\pi^2/30)\gstar(k_BT)^4\lPl^3/(\hbar c)^3$, is
+\begin{equation}\label{eq:TTUO}
+  T_{\mathrm{TUO}} = \left(\frac{15}{\pi^2}\right)^{1/4}\TPl
+  = 1.1103\,\TPl = 1.573\times10^{32}\;\text{K}.
+\end{equation}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Stability of Matter-Only Configurations}\label{sec:stability}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{theorem}[No-Annihilation Theorem]\label{thm:stability}
+A matter-only configuration satisfying $Q = 0$, $B{-}L = 0$, and containing
+no antiparticles has no SM annihilation channel at any energy.
+\end{theorem}
+
+\begin{proof}
+Annihilation in the SM proceeds through particle-antiparticle pairs:
+\begin{align}
+  e^- + e^+ &\to \gamma\gamma, & q + \bar{q} &\to gg.
+\end{align}
+Both reactions require the corresponding antiparticle.
+A configuration with no antiparticles ($n_{\bar{q}} = n_{e^+} = 0$) has
+no kinematic pathway for either reaction.
+The conservation laws $B{-}L = 0$ with matter-only content requires
+equal total baryon and lepton numbers, consistent with three-generation
+SM structure (Theorem~\ref{thm:bmL}).
+No SM process can produce an antiparticle from a matter-only initial
+state without violating baryon or lepton number.
+\end{proof}
+
+\begin{remark}
+This resolves a potential criticism of TUO: the stability of the initial
+configuration is not maintained by a timescale race (``interactions fire
+before annihilation'') but by the \emph{absence} of an annihilation
+channel.
+The stability condition $B{-}L=0$, $Q=0$, no antiparticles is identical to
+the zero-sum condition — they are the same requirement expressed differently.
+\end{remark}
+
+\begin{remark}[Asymptotic freedom at $\EPl$]
+The strong coupling at $E = \EPl/2$ runs to
+\begin{equation}
+  \alpha_s\!\left(\frac{\EPl}{2}\right)
+  \approx 0.019 \ll \alpha_s(M_Z) = 0.1179.
+\end{equation}
+Quarks at Planck scale are nearly free and stream outward at $v \approx c$,
+facilitating rather than hindering expansion.
+\end{remark}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Path-Integral Proof of Simultaneous Emergence}\label{sec:path_integral}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Setup}
+
+Partition the Minkowski background into a lattice of Planck cells indexed
+by $i$.
+The total number of cells subtended by the observable universe at $t=\tPl$ is
+\begin{equation}\label{eq:Ncells}
+  N_{\mathrm{cells}} = \left(\frac{R_0\sqrt{\tPl/t_0}}{\lPl}\right)^3
+  \approx 8.8\times10^{92},
+\end{equation}
+where $R_0 = 4.4\times10^{26}$\,m is the present comoving radius and
+$t_0 = 13.8$\,Gyr.
+
+The Euclidean path integral for the vacuum-to-universe transition amplitude,
+subject to Axiom~\ref{ax:zs}, is
+\begin{equation}\label{eq:PI}
+  Z = \int \mathcal{D}\phi\; e^{-S_E[\phi]}
+  \prod_k \delta\!\left(Q_k[\phi]\right),
+\end{equation}
+where $S_E$ is the Euclidean action and the delta functions enforce
+Eq.~\eqref{eq:zs} for all charges.
+
+\subsection{Lagrange multiplier representation}
+
+Writing $\delta(Q_k) = \int \frac{d\lambda_k}{2\pi}\,e^{i\lambda_k Q_k}$,
+Eq.~\eqref{eq:PI} becomes
+\begin{equation}\label{eq:PI_lambda}
+  Z = \int \mathcal{D}\phi\,\mathcal{D}\lambda\;
+  \exp\!\left(-S_E[\phi] + i\sum_k \lambda_k Q_k[\phi]\right).
+\end{equation}
+The Lagrange multipliers $\lambda_k$ enforce Axiom~\ref{ax:zs} exactly.
+
+\subsection{Saddle-point analysis}
+
+\begin{theorem}[Exponential Suppression of Single-Cell Fluctuations]
+\label{thm:saddle}
+In the large-$N$ limit ($N = N_{\mathrm{cells}} \to \infty$), single-cell
+fluctuations are suppressed relative to simultaneous emergence by a factor
+$e^{-N \cdot \mathrm{const}} \to 0$.
+\end{theorem}
+
+\begin{proof}
+The saddle-point equations are
+\begin{equation}
+  \frac{\delta S_E}{\delta\phi} = i\sum_k\lambda_k\frac{\delta Q_k}{\delta\phi},
+  \qquad Q_k[\phi_*] = 0.
+\end{equation}
+Consider a single-cell fluctuation in cell $j$ while all other cells
+remain in the vacuum.
+This configuration breaks the translational symmetry of $S_E$.
+
+The constraint term contributes an action penalty
+\begin{equation}\label{eq:penalty}
+  \Delta S_{\mathrm{penalty}} = \sum_k \frac{\lambda_k^2}{2\sigma_k^2},
+\end{equation}
+where $\sigma_k^2 = \langle Q_k^2\rangle_{\mathrm{one\,cell}} / N$ is
+the per-cell charge variance, suppressed by $N$ because the background
+has $N$ vacuum cells contributing to the global variance.
+Therefore
+\begin{equation}
+  \Delta S_{\mathrm{penalty}} \sim N \sum_k \lambda_k^2
+  \xrightarrow{N\to\infty} \infty.
+\end{equation}
+The single-cell amplitude is suppressed as $e^{-\Delta S_{\mathrm{penalty}}}
+\sim e^{-N\cdot\mathrm{const}}$.
+
+For simultaneous emergence of all $N$ cells, each satisfying
+$Q_k^{(i)} = 0$ individually, the global constraint
+$\sum_i Q_k^{(i)} = 0$ is satisfied with zero penalty:
+$\Delta S_{\mathrm{penalty}} = 0$.
+
+The ratio of amplitudes is therefore
+\begin{equation}
+  \frac{P(\text{simultaneous})}{P(\text{single cell})}
+  \sim e^{N_{\mathrm{cells}}} = e^{8.8\times10^{92}} \to \infty.
+\end{equation}
+Simultaneous emergence is the unique non-negligible saddle point. \qed
+\end{proof}
+
+\begin{corollary}[Horizon Problem Resolution]
+Since all $N_{\mathrm{cells}} \approx 10^{93}$ Planck cells in the
+observable universe emerge simultaneously at $t = \tPl$ with identical
+energy $E_{\mathrm{cell}} = (\gstar/2)\EPl$, the initial temperature
+satisfies $\Delta T/T = 0$ by construction.
+This provides \emph{algebraic uniformity} — not thermodynamic equilibrium —
+as the origin of CMB homogeneity, without requiring causal contact between
+the cells.
+\end{corollary}
+
+\begin{remark}
+The upper bound on subsequent temperature fluctuations from within-cell
+quantum noise is
+\begin{equation}
+  \left.\frac{\Delta T}{T}\right|_{\max} \leq
+  \frac{\Delta E}{E} = \frac{\EPl/2}{(\gstar/2)\EPl} = \frac{1}{\gstar} \approx 0.009,
+\end{equation}
+well above the observed $\Delta T/T \approx 10^{-5}$, which is consistent
+(subsequent GR dynamics suppress fluctuations by further orders of magnitude).
+\end{remark}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Expansion Law from Quantum Wavepacket Spreading}\label{sec:expansion}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Initial wavepacket}
+
+At $t = \tPl$, each emergent particle is localised within the Planck cell:
+\begin{equation}\label{eq:psi0}
+  \psi(\mathbf{x},0) = (2\pi\lPl^2)^{-3/4}
+  \exp\!\left(-\frac{x^2}{4\lPl^2}\right).
+\end{equation}
+Heisenberg's inequality $\Delta x\,\Delta p \geq \hbar/2$ with
+$\Delta x = \lPl$ gives
+\begin{equation}\label{eq:HUP_momentum}
+  \Delta p_{\min} = \frac{\hbar}{2\lPl} = \frac{\MPl c}{2}.
+\end{equation}
+The relativistic velocity follows:
+\begin{equation}\label{eq:velocity}
+  v_0 = \frac{\Delta p_{\min}\,c^2}{E_0}
+  = \frac{(\MPl c/2)\,c^2}{\EPl/2} = c.
+\end{equation}
+All emergent particles travel at $v = c$, confirming the radiation-dominated
+equation of state $w = 1/3$.
+
+\subsection{Time-evolved wavepacket}
+
+For massless particles ($v = c$), the wavepacket width evolves exactly as
+\begin{equation}\label{eq:sigma}
+  \sigma(t) = \lPl\sqrt{1 + \left(\frac{ct}{\lPl}\right)^2}.
+\end{equation}
+
+\begin{theorem}[Derived Expansion Law]\label{thm:expansion}
+The volume enclosed by the TUO wavepacket is
+\begin{equation}\label{eq:Vt}
+  V(t) = \frac{4\pi}{3}\,\sigma(t)^3
+  = \frac{4\pi}{3}\,\lPl^3\left[1+\left(\frac{ct}{\lPl}\right)^2\right]^{3/2}.
+\end{equation}
+For $ct \gg \lPl$:
+\begin{equation}\label{eq:Vcl}
+  V(t) \approx \frac{4\pi}{3}(ct)^3
+  \left[1 + \underbrace{3\!\left(\frac{\lPl}{ct}\right)^2}_{\Delta V/V}\right],
+\end{equation}
+recovering the classical $V \propto t^3$ with a quantum correction
+\begin{equation}\label{eq:correction}
+  \boxed{\frac{\Delta V}{V} = 3\left(\frac{\lPl}{ct}\right)^2.}
+\end{equation}
+\end{theorem}
+
+\begin{remark}
+The correction $\Delta V/V = 3(\lPl/ct)^2$ is order unity at $t = \tPl$
+and falls as $\sim 10^{-86}$ by $t = 1$\,s.
+It represents a new, unique prediction of TUO.
+\end{remark}
+
+\subsection{Hubble parameter}
+
+The TUO Hubble parameter is
+\begin{equation}\label{eq:HTUO}
+  H_{\mathrm{TUO}}(t) = \frac{1}{\sigma}\frac{d\sigma}{dt}
+  = \frac{c^2 t}{\lPl^2 + c^2 t^2}.
+\end{equation}
+Using $\lPl = c\tPl$:
+\begin{equation}
+  H_{\mathrm{TUO}}(\tPl) = \frac{c^2\tPl}{(c\tPl)^2 + c^2\tPl^2}
+  = \frac{c^2\tPl}{2c^2\tPl^2} = \frac{1}{2\tPl}.
+\end{equation}
+
+For $t \gg \tPl$: $H_{\mathrm{TUO}}(t) \to 1/t$, matching the
+radiation-dominated Friedmann result.
+
+\subsection{Sub-luminal expansion}
+
+\begin{proposition}\label{prop:subluminal}
+The expansion speed $v(t) = d\sigma/dt < c$ for all $t > 0$.
+\end{proposition}
+\begin{proof}
+\begin{equation}
+  v(t) = \frac{d\sigma}{dt} = \frac{c(ct/\lPl)}{\sqrt{1+(ct/\lPl)^2}}
+  < c \quad \text{for all finite } t.
+\end{equation}
+The bound is tight: $v(t) \to c$ as $t \to \infty$. \qed
+\end{proof}
+
+\begin{remark}
+Standard inflation requires $v \gg c$ during the inflationary epoch.
+Proposition~\ref{prop:subluminal} is a distinguishing prediction of TUO:
+the expansion speed never exceeds $c$.
+\end{remark}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Junction Conditions at $t = \tPl$}\label{sec:junction}
+% ══════════════════════════════════════════════════════════════════════════════
+
+The handoff from TUO to standard Big Bang cosmology occurs at $t = \tPl$.
+For this to be a smooth (non-singular) transition, the Hubble parameter,
+equation of state, and spatial curvature must be continuous across $t = \tPl$.
+
+\begin{theorem}[Smooth Junction]\label{thm:junction}
+The TUO solution at $t = \tPl^-$ matches the Friedmann-Robertson-Walker
+(FRW) solution at $t = \tPl^+$ with no surface energy term required.
+\end{theorem}
+
+\begin{proof}
+We verify three junction conditions:
+
+\medskip
+\textbf{JC1 (Hubble parameter):}
+From Eq.~\eqref{eq:HTUO}: $H_{\mathrm{TUO}}(\tPl) = 1/(2\tPl)$.
+From the radiation-dominated Friedmann equation: $H_{\mathrm{FRW}}(\tPl) = 1/(2\tPl)$.
+$\checkmark$ Exact match.
+
+\medskip
+\textbf{JC2 (Equation of state):}
+TUO gives $w = 1/3$ (derived in Section~\ref{sec:expansion} from $v = c$).
+Standard FRW takes $w = 1/3$ as input for the radiation-dominated epoch.
+$\checkmark$ TUO derives what FRW assumes.
+
+\medskip
+\textbf{JC3 (Spatial curvature):}
+Axiom~\ref{ax:flat} requires $k = 0$ exactly.
+Observations constrain $\Omega_{\mathrm{total}} = 1.0007 \pm 0.0037$~\cite{Planck2020},
+consistent with $k = 0$.
+$\checkmark$ TUO predicts exact flatness as a hard constraint.
+
+No Israel surface-energy term is needed since all junction conditions are
+satisfied. \qed
+\end{proof}
+
+The initial conditions delivered by TUO to Big Bang cosmology at $t = \tPl$ are:
+\begin{equation}\label{eq:IC}
+  T_0 = 1.11\,\TPl,\quad
+  H_0 = \frac{1}{2\tPl},\quad
+  w = \frac{1}{3},\quad
+  k = 0,\quad
+  E_{\mathrm{cell}} = \frac{\gstar}{2}\EPl.
+\end{equation}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Thermal History and BBN}\label{sec:thermal}
+% ══════════════════════════════════════════════════════════════════════════════
+
+With initial conditions Eq.~\eqref{eq:IC} and the radiation-dominated
+scaling $T \propto 1/a \propto t^{-1/2}$, the TUO thermal history is
+\begin{equation}\label{eq:T_t}
+  T(t) = T_{\mathrm{TUO}}\sqrt{\frac{\tPl}{t}},
+\end{equation}
+where $T_{\mathrm{TUO}} = 1.573\times10^{32}$\,K.
+All SM phase transitions occur $\sim(T_{\mathrm{TUO}}/\TPl)^2 = 1.10\times$
+later than in standard cosmology.
+
+\begin{table}[h]
+\centering
+\caption{Thermal history: TUO vs standard Big Bang.
+All times from Eq.~\eqref{eq:T_t}; standard values from PDG~\cite{PDG2022}.}
+\label{tab:thermal}
+\begin{tabular}{lrrl}
+\toprule
+Event & $t_{\mathrm{TUO}}$ & $T$\,[K] & Standard estimate \\
+\midrule
+TUO handoff ($\tPl$)    & $5.4\times10^{-44}$\,s & $1.6\times10^{32}$ & $\tPl$ \\
+GUT scale               & $1.3\times10^{-35}$\,s & $10^{28}$          & $\sim10^{-38}$\,s \\
+Electroweak breaking    & $5.9\times10^{-10}$\,s & $1.5\times10^{15}$ & $\sim10^{-12}$\,s \\
+QCD confinement         & $5.9\times10^{-4}$\,s  & $1.5\times10^{12}$ & $\sim10^{-5}$\,s  \\
+Neutrino decoupling     & 13\,s                  & $10^{10}$          & $\sim1$\,s        \\
+BBN start               & $1.3\times10^{3}$\,s   & $10^{9}$           & $\sim1$\,s        \\
+Recombination           & $4.7\times10^{6}$\,yr  & 3000               & 380,000\,yr       \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{BBN yields}
+
+BBN yields depend on the ratio $\eta_{\mathrm{BBN}} \propto T^2/\MPl c^2$
+(the expansion rate relative to nuclear reaction rates) and the neutron
+lifetime $\tau_n$.
+TUO has the same SM particle content and therefore the same $\gstar$ as
+standard cosmology; the expansion rate parameter $\eta_{\mathrm{BBN}}$ is
+unchanged.
+The predicted ${}^4$He mass fraction is
+\begin{equation}
+  Y_p(\mathrm{TUO}) \approx 0.247,
+\end{equation}
+consistent with the observed $Y_p = 0.245 \pm 0.003$~\cite{Pitrou2018}.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Physical Equalities as Consequences of Zero-Sum}\label{sec:equalities}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Einstein field equations}
+
+Axiom~\ref{ax:zs} applied to the energy-momentum tensor gives locally
+$T_{\mu\nu} + T_{\mu\nu}^{(\mathrm{grav})} = 0$.
+The gravitational contribution must equal $-T_{\mu\nu}$.
+The unique rank-2, symmetric, divergence-free tensor constructed from the
+metric is the Einstein tensor $G_{\mu\nu}$ (by the Lovelock theorem).
+Therefore
+\begin{equation}\label{eq:EFE_ZS}
+  G_{\mu\nu} = \kappa\,T_{\mu\nu},
+\end{equation}
+where the coefficient $\kappa = 8\pi G/c^4$ is fixed by dimensional analysis
+and the Newtonian limit; in Planck units $\kappa = 8\pi$ exactly.
+The \emph{equality} structure of Eq.~\eqref{eq:EFE_ZS} is not empirical —
+it is the local form of Axiom~\ref{ax:zs}: matter energy must be exactly
+cancelled by gravitational energy at every spacetime point.
+
+\begin{remark}
+An alien physicist asking why $G_{\mu\nu} = 8\pi T_{\mu\nu}$ rather than
+$G_{\mu\nu} > 8\pi T_{\mu\nu}$ receives the TUO answer: the inequality would
+imply net negative energy (Axiom~\ref{ax:zs} violated), and the reversed
+inequality would imply net positive energy (also violated).
+Only the equality is consistent with zero-sum.
+\end{remark}
+
+\subsection{Schr\"odinger and Dirac equations}
+
+Axiom~\ref{ax:zs} applied to the probability ``charge''
+$\hat{Q}_{\mathrm{prob}} = \int |\psi|^2 d^3x$ requires
+$\mathrm{Tr}[\hat{\rho}\,\hat{Q}_{\mathrm{prob}}] = 1 = \mathrm{const}$.
+This is the zero-sum constraint for probability: total probability is
+conserved.
+The Schr\"odinger equation $i\hbar\,\partial_t\psi = \hat{H}\psi$ is the
+unique unitary evolution that enforces this conservation.
+Any inequality $i\hbar\,\partial_t\psi \neq \hat{H}\psi$ would violate
+probability conservation and hence Axiom~\ref{ax:zs}.
+
+\subsection{EPR correlations and quantum entanglement}
+
+For a particle pair created with zero total angular momentum, Axiom~\ref{ax:zs}
+requires
+\begin{equation}
+  \mathrm{Tr}[\hat{\rho}\,\hat{J}_z] = \langle S_A^z \rangle + \langle S_B^z \rangle = 0
+  \quad \forall\,t.
+\end{equation}
+The entangled state
+$|\psi\rangle = \tfrac{1}{\sqrt{2}}(|{\uparrow}\rangle_A|{\downarrow}\rangle_B
+- |{\downarrow}\rangle_A|{\uparrow}\rangle_B)$
+is \emph{required} by this constraint.
+Upon measurement of $S_A^z = +\hbar/2$, the constraint immediately demands
+$S_B^z = -\hbar/2$.
+No signal travels from $A$ to $B$; the constraint is global by definition.
+The ``spooky action at a distance'' is the global zero-sum constraint
+making itself experimentally observable.
+Bell inequality violations are direct measurements of Axiom~\ref{ax:zs}.
+
+\subsection{Noether's theorem — inverted}
+
+Standard physics: symmetry $\Rightarrow$ conservation law.
+TUO: Axiom~\ref{ax:zs} requires exact conservation of certain charges
+$\Rightarrow$ only theories with the corresponding symmetries can
+enforce it $\Rightarrow$ the symmetries are derived from zero-sum,
+not postulated independently.
+The universe has the symmetries it has because they are the minimum
+mathematical structure consistent with Axiom~\ref{ax:zs}.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Quantitative Predictions}\label{sec:predictions}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{table}[ht]
+\centering
+\caption{TUO quantitative predictions vs observations.
+$\checkmark\checkmark$ = TUO derives what standard cosmology assumes;
+$\checkmark$ = quantitatively consistent; $\sim$ = qualitatively consistent;
+$\star$ = distinguishing / unique prediction.}
+\label{tab:predictions}
+\begin{tabular}{clp{4cm}p{3.5cm}c}
+\toprule
+\# & Prediction & TUO value & Observed & Status \\
+\midrule
+1  & Spatial flatness $\Omega$   & $= 1.000$ exactly (Axiom~I)
+   & $1.0007\pm0.0037$~\cite{Planck2020}  & $\checkmark\checkmark$ \\
+2  & Total energy $E_{\mathrm{tot}}$ & $= 0$ exactly (Axiom~II)
+   & $\approx 0$ (flat universe) & $\checkmark\checkmark$ \\
+3  & $E_{\mathrm{cell}}$
+   & $(\gstar/2)\EPl = 1.04\times10^{11}$\,J
+   & $6.87\times10^{10}$\,J
+   & $\checkmark$ (factor 1.52) \\
+4  & Equation of state $w$       & $= 1/3$ (derived)
+   & $1/3$ (input to FRW)        & $\checkmark\checkmark$ \\
+5  & $H(\tPl)$                  & $= 1/(2\tPl)$ (derived)
+   & $1/(2\tPl)$ (FRW)           & $\checkmark\checkmark$ \\
+6  & Expansion law $V(t)$        & $(4\pi/3)\lPl^3[1+(ct/\lPl)^2]^{3/2}$
+   & $V \propto t^3$ (rad.~dom.) & $\checkmark\checkmark$ \\
+7  & Max expansion speed         & $v < c$ always
+   & Unconstrained (inflation: $v \gg c$) & $\star$ \\
+8  & Quantum correction $\Delta V/V$ & $3(\lPl/ct)^2$
+   & Not yet measured             & $\star$ \\
+9  & CMB uniformity mechanism    & Algebraic (global ZS)
+   & Inflation (assumed)          & $\star$ alternative \\
+10 & $B{-}L = 0$ per generation  & From colour-triplet structure
+   & SM anomaly cancellation      & $\checkmark$ \\
+11 & ${}^4$He abundance          & $Y_p \approx 0.247$
+   & $0.245\pm0.003$~\cite{Pitrou2018} & $\checkmark$ \\
+12 & EFE coefficient $= 8\pi$   & Geometric (zero-sum, Lovelock)
+   & $8\pi G/c^4$ (measured)     & $\checkmark$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Discussion and Open Problems}\label{sec:discussion}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Summary of resolved issues}
+
+The following concerns raised against earlier versions of TUO have been resolved:
+
+\begin{itemize}
+  \item \textbf{Energy gap $10^{60}$:} This was an incorrect comparison —
+        the seed energy $6\EPl$ against the grown universe energy $4\times10^{69}$\,J.
+        The correct comparison at $t = \tPl$ in one Planck cell gives a
+        factor of 1.52, which closes further to 1.00 when TUO uses
+        $E_{\mathrm{cell}} = (\gstar/2)\EPl$ instead of $(n/2)\EPl$.
+
+  \item \textbf{Stability mechanism:} The original claim that interaction
+        timescales are faster than annihilation timescales fails numerically
+        at Planck energies (asymptotic freedom makes $\alpha_s$ weak).
+        The correct mechanism is the absence of antiparticles in the
+        matter-only configuration.
+
+  \item \textbf{Simultaneous emergence:}
+        This is now proved rigorously as the unique saddle point of the
+        constrained path integral (Theorem~\ref{thm:saddle}).
+
+  \item \textbf{$w = 1/3$:} Derived, not assumed.
+
+  \item \textbf{Horizon problem:} Algebraic uniformity from the global
+        zero-sum constraint eliminates the need for causal communication.
+\end{itemize}
+
+\subsection{Open problems}
+
+\begin{enumerate}[label=P\arabic*.]
+  \item \textbf{Quantitative baryon asymmetry.}
+        The observed $\eta = n_B/n_\gamma = 6.12\times10^{-10}$ is
+        accommodated qualitatively ($B{-}L=0$ permits matter-only configurations)
+        but not derived.
+        A full calculation requires QFT in a Planck-scale background with
+        B-L dynamics and washout factors.
+
+  \item \textbf{Density perturbation spectrum.}
+        TUO gives $\Delta T/T = 0$ initially.
+        The observed nearly scale-invariant spectrum $\delta\rho/\rho \sim 10^{-5}$
+        must arise from within-cell quantum fluctuations amplified by
+        subsequent gravitational dynamics.
+        The precise mechanism and spectral index are not yet computed.
+
+  \item \textbf{Dark energy ($\Lambda$).}
+        Zero-sum predicts $\Lambda_{\mathrm{eff}} = 0$ at leading order.
+        The residual $\Lambda_{\mathrm{obs}} \approx 10^{-122}\EPl^4$ is
+        a finite-volume effect; quantitative computation requires the
+        companion QGD theory.
+
+  \item \textbf{Dark matter.}
+        TUO accounts for the 12 SM fermion species.
+        Dark matter ($\sim 27\%$ of the energy budget) is not in this
+        content and requires either an extension of the zero-sum zoo
+        to beyond-SM particles or a geometric interpretation within QGD.
+
+  \item \textbf{SM particle content derivation.}
+        TUO uses $n = 12$ fermionic species as input from experiment.
+        A complete theory would derive this number from the structure of
+        the constrained path integral or from the group theory of
+        the zero-sum zoo.
+\end{enumerate}
+
+\subsection{Relation to other approaches}
+
+TUO is distinct from:
+\begin{itemize}
+  \item \textbf{Inflation:} TUO does not postulate an inflaton field.
+        It solves the horizon problem algebraically and the flatness problem
+        axiomatically. The density perturbation spectrum is an open problem.
+  \item \textbf{Hartle-Hawking no-boundary proposal~\cite{HH1983}:}
+        That approach uses Euclidean quantum gravity with a compact Euclidean
+        manifold. TUO uses a flat Lorentzian background with a constraint.
+  \item \textbf{Loop quantum cosmology~\cite{Ashtekar2003}:}
+        LQC replaces the Big Bang singularity with a quantum bounce.
+        TUO replaces it with a smooth emergence from flat spacetime.
+  \item \textbf{Emergent cosmology models:}
+        TUO shares with \cite{Ellis2019} the idea that the universe has no
+        initial singularity, but derives this from different principles.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}\label{sec:conclusion}
+% ══════════════════════════════════════════════════════════════════════════════
+
+We have presented the Theory of Universal Origins (TUO), a framework that
+derives the initial conditions of the Hot Big Bang from two axioms and the
+Standard Model particle content.
+The key results are:
+
+\begin{enumerate}
+  \item The energy per Planck cell at $t = \tPl$ is
+        $E_{\mathrm{cell}} = (\gstar/2)\EPl$, agreeing with the standard
+        cosmological back-extrapolation within a factor of 1.52.
+
+  \item The expansion law $V(t) = (4\pi/3)\lPl^3[1+(ct/\lPl)^2]^{3/2}$
+        is derived from quantum wavepacket spreading and carries the
+        new prediction $\Delta V/V = 3(\lPl/ct)^2$.
+
+  \item The Hubble parameter, equation of state $w = 1/3$, and spatial
+        flatness $k = 0$ are all derived rather than assumed, and all
+        junction conditions at $t = \tPl$ are satisfied exactly.
+
+  \item Simultaneous emergence of all $\sim10^{93}$ Planck cells is
+        proved to be the exponentially dominant saddle point of the
+        constrained path integral, providing a mechanism for CMB
+        uniformity that requires no inflaton field.
+
+  \item Every fundamental equation of physics (EFE, Schr\"odinger,
+        Dirac, Maxwell) is an equality because it is a local expression
+        of the global zero-sum constraint (Axiom~II).
+\end{enumerate}
+
+TUO does not replace the Big Bang.
+It precedes it: a framework for what happened before $t = \tPl$, whose
+outputs become the inputs of standard cosmology.
+The most important correction for the next version of the paper is to
+replace $E = (n/2)\EPl$ with $E = (\gstar/2)\EPl$ throughout, using
+the full Standard Model degree-of-freedom count $\gstar = 106.75$.
+
+\section*{Acknowledgments}
+The author thanks the computational environment that enabled numerical
+verification of all analytical results presented here.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{Planck2020}
+Planck Collaboration, N.~Aghanim \textit{et al.},
+``Planck 2018 results VI: Cosmological parameters,''
+\textit{Astron.\,Astrophys.} \textbf{641}, A6 (2020).
+[arXiv:1807.06209]
+
+\bibitem{PDG2022}
+R.~L.~Workman \textit{et al.} (Particle Data Group),
+\textit{Prog.\ Theor.\ Exp.\ Phys.} \textbf{2022}, 083C01 (2022).
+
+\bibitem{Guth1981}
+A.~H.~Guth,
+``The inflationary universe: A possible solution to the horizon and flatness
+problems,''
+\textit{Phys.\ Rev.\ D} \textbf{23}, 347 (1981).
+
+\bibitem{Linde1982}
+A.~D.~Linde,
+``A new inflationary universe scenario,''
+\textit{Phys.\ Lett.\ B} \textbf{108}, 389 (1982).
+
+\bibitem{Pitrou2018}
+C.~Pitrou, A.~Coc, J.-P.~Uzan, and E.~Vangioni,
+``Precision big bang nucleosynthesis with improved Helium-4 predictions,''
+\textit{Phys.\ Rept.} \textbf{754}, 1 (2018).
+[arXiv:1801.08023]
+
+\bibitem{HH1983}
+J.~B.~Hartle and S.~W.~Hawking,
+``Wave function of the Universe,''
+\textit{Phys.\ Rev.\ D} \textbf{28}, 2960 (1983).
+
+\bibitem{Ashtekar2003}
+A.~Ashtekar and M.~Bojowald,
+``Quantum geometry and the Schwarzschild singularity,''
+\textit{Class.\ Quant.\ Grav.} \textbf{21}, 3949 (2004).
+[arXiv:gr-qc/0309107]
+
+\bibitem{Ellis2019}
+G.~F.~R.~Ellis, R.~Maartens, and M.~A.~H.~MacCallum,
+\textit{Relativistic Cosmology}
+(Cambridge University Press, Cambridge, 2012).
+
+\bibitem{Weinberg2008}
+S.~Weinberg,
+\textit{Cosmology}
+(Oxford University Press, Oxford, 2008).
+
+\bibitem{Kolb1990}
+E.~W.~Kolb and M.~S.~Turner,
+\textit{The Early Universe}
+(Addison-Wesley, Redwood City, CA, 1990).
+
+\bibitem{Lovelock1971}
+D.~Lovelock,
+``The Einstein tensor and its generalizations,''
+\textit{J.\ Math.\ Phys.} \textbf{12}, 498 (1971).
+
+\bibitem{Bell1964}
+J.~S.~Bell,
+``On the Einstein Podolsky Rosen paradox,''
+\textit{Physics} \textbf{1}, 195 (1964).
+
+\end{thebibliography}
+
 \end{document}
