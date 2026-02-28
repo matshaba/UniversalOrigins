@@ -1,220 +1,174 @@
 # Theory of Universal Origins (TUO)
 
-**A Matrix-Algebraic Framework for Cosmogenesis**  
-*Romeo Matshaba · University of South Africa · 2026*
+**A pre-Big-Bang framework derived from a single algebraic constraint**
+
+> *A framework that claims too much is fragile — one disproof brings down the whole structure.  
+> A framework that delineates exactly what is proven from what is conjectured is robust:  
+> disproving a conjecture does not touch the theorems.*
 
 ---
 
-## The Central Idea in One Sentence
+## What TUO Is
 
-The universe is a non-trivial rearrangement of nothing — a configuration of matter and fields whose total observable content, when assembled as an infinite column vector and evaluated against every conserved charge operator, equals the infinite zero matrix.
+TUO proposes that the universe emerged from a quantum vacuum constrained by one requirement: **every conserved charge must sum to exactly zero**. From this single axiom — applied to the Standard Model's particle content in an infinite-dimensional Fock space — the initial conditions of the Hot Big Bang follow without free parameters.
 
----
-
-## The Two Axioms
-
-Everything in TUO follows from exactly two postulates.
-
-**Axiom I — Flat Background**  
-The pre-emergence arena is (3+1)-dimensional Minkowski spacetime.  
-No curvature. No preferred time. No pre-existing matter.
-
-**Axiom II — Global Zero-Sum Constraint**  
-For every conserved charge operator Q̂_k and all times t:
-
-```
-Tr[ρ̂(t) Q̂_k] = 0    ∀k, ∀t
-```
-
-Written as an infinite column vector — **the universe's full observable content equals the zero matrix at every instant**:
-
-```
-⎡ Tr[ρ̂ Ĥ]         ⎤   ⎡ 0 ⎤
-⎢ Tr[ρ̂ P̂^μ]      ⎥   ⎢ 0 ⎥
-⎢ Tr[ρ̂ Ĵ]         ⎥   ⎢ 0 ⎥
-⎢ Tr[ρ̂ Q̂_em]     ⎥ = ⎢ 0 ⎥ = Ξ
-⎢ Tr[ρ̂ Q̂_{B-L}]  ⎥   ⎢ 0 ⎥
-⎣ Tr[ρ̂ Q̂_colour] ⎦   ⎣ 0 ⎦
-```
-
-This is not an approximation. It is exact, and it holds at every instant.
+TUO ends precisely where the Hot Big Bang begins.
 
 ---
 
-## Mathematical Language: Infinite-Dimensional Linear Algebra
+## Two Axioms
 
-The universe state lives in Fock space `𝓕 = ⊕_{n=0}^∞ ℋ_n`. The density operator is an infinite matrix:
+| Axiom | Statement |
+|-------|-----------|
+| **I. Flat Background** | The pre-emergence spacetime is (3+1)-dimensional Minkowski space with metric η_μν = diag(−1,+1,+1,+1). No curvature, no preferred time. |
+| **II. Zero-Sum Constraint** | For every conserved charge Q̂_k and all times t: Tr[ρ̂(t) Q̂_k] = 0. The full charge vector equals the infinite zero matrix: **Q**[ρ̂] = **0**_∞ |
 
-```
-      ⎛ ρ₀₀  ρ₀₁  ρ₀₂  ··· ⎞
-ρ̂ =  ⎜ ρ₁₀  ρ₁₁  ρ₁₂  ··· ⎟
-      ⎜ ρ₂₀  ρ₂₁  ρ₂₂  ··· ⎟
-      ⎝  ·    ·    ·   ·    ⎠
-```
-
-Each conserved charge Q̂_k is diagonal in its eigenbasis:
-
-```
-         ⎛ q_{k0}    0      0    ··· ⎞
-Q̂_k =   ⎜   0    q_{k1}   0    ··· ⎟
-         ⎜   0      0    q_{k2} ··· ⎟
-         ⎝   ·      ·      ·    ·   ⎠
-```
-
-The constraint `Tr[ρ̂ Q̂_k] = Σ_{n} ρ_{nn} · q_{kn} = 0` is an **infinite linear equation** on the occupation probabilities. The set of physically allowed density operators is the intersection of these hyperplanes — a highly constrained, discrete manifold. There is no continuous dial to tune: the universe either satisfies Axiom II or it does not.
+These are the **only** postulates. Everything else is derived.
 
 ---
 
-## All Scales Are SM-Derived — Not Assumed
+## What Is Proven (from axioms alone)
 
-A key principle: Planck units (t_Pl, l_Pl, T_Pl) are phenomenological combinations of G, ℏ, c. TUO derives its natural scales from the SM particle content.
+| Result | Significance |
+|--------|-------------|
+| **E_total = 0** exactly | The universe has zero net energy — a consequence of G·M_Pl² = ℏc, pure Planck algebra |
+| **w = 1/3** (derived) | The radiation equation of state — HBB assumes this; TUO derives it from v₀ = c |
+| **H(t_Pl) = 1/(2t_Pl)** | The Planck-era Hubble rate — HBB assumes this; TUO derives it from wavepacket spreading |
+| **Ω = 1** exactly | Spatial flatness — forced by Axiom I |
+| **E_cell = (g*/2) E_Pl** | All SM modes at Heisenberg minimum; equals 1.04 × 10¹¹ J per Planck cell |
+| **T_TUO = (15/π²)^(1/4) T_Pl** | Pre-emergence temperature, **independent of g*** — a non-trivial cancellation |
+| **B−L = 0, Q = 0** per generation | SM anomaly cancellation as a consequence of Axiom II |
+| **No-annihilation theorem** | Matter-only configurations have no kinematic annihilation channel |
+| **V(t) ∝ t³, v < c always** | Expansion law with quantum correction ΔV/V = 3(ℓ_Pl/ct)² |
+| **All 5 HBB initial conditions** | Seamless handoff to standard cosmology at t = t_Pl |
 
-Setting the SM thermal energy density equal to the Planck energy density:
+---
+
+## The Core Physical Argument
+
+Generic vacuum fluctuations cannot become a universe. Two barriers prevent it:
+
+1. **Energy gap**: A typical electron-positron pair carries ~10⁻¹³ J. The energy needed for a Planck cell is ~10¹¹ J. That is a factor of 10²⁴. No accumulation mechanism bridges this gap in one Planck time.
+
+2. **Annihilation timescale**: At Planck energies, Δt ~ t_Pl ~ 5.4 × 10⁻⁴⁴ s. Any particle-antiparticle content collapses back to vacuum before structure forms.
+
+**The resolution** is the most extreme fluctuation consistent with the zero-sum axiom: *all Standard Model degrees of freedom — quarks, leptons, gauge bosons, Higgs — emerging simultaneously, co-located at a single Planck-scale volume, with no antiparticles.*
+
+This configuration:
+- Satisfies zero-sum (B−L = 0, Q = 0 per generation, E_grav = −E_matter)
+- Carries sufficient energy (10²⁴× more than a generic pair)
+- Is **kinematically stable** — no antiparticles means no annihilation channel
+
+The number g* = 106.75 is not a parameter of TUO. It is the count of all SM degrees of freedom, and it appears in E_cell because **all of them must emerge together** for either barrier to be overcome.
+
+---
+
+## The TUO–HBB Junction
 
 ```
-ρ_SM(T) = (π²/30) g* T⁴/(ℏc)³  =  ρ_Pl
-
-→  T* = (30/(π² g*))^(1/4) × T_Pl  =  0.411 T_Pl   [SM thermal scale]
-
-E_cell = (g*/2) E_Pl  →  T_TUO = (15/π²)^(1/4) × T_Pl  =  1.1103 T_Pl
-
-→  t* = (T_TUO/T*)² × t_Pl  =  7.31 × t_Pl            [SM-derived emergence time]
+TUO regime (t < t_Pl)          at t = t_Pl          Hot Big Bang (t > t_Pl)
+─────────────────────          ────────────          ─────────────────────────
+Zero-sum pre-emergence    ←→   HANDOFF POINT   ←→   Radiation domination
+Wavepacket σ(t), v < c                              a(t) ∝ t^(1/2)
+w = 1/3  [derived]             w = 1/3              w = 1/3  [assumed by HBB]
+H = 1/(2t_Pl) [derived]        H continuous          H = 1/(2t) [assumed by HBB]
+k = 0 [Axiom I]                Ω = 1                Ω = 1 [assumed by HBB]
+g* = 106.75 [all SM]           plasma formed         Standard thermodynamics
 ```
 
-The emergence timescale is **7.31 t_Pl**, not t_Pl by assumption. The Fermi-Dirac mode occupation at T_TUO peaks at k = 35, not k = 33.
+---
+
+## What TUO Does NOT Claim
+
+TUO does not derive or predict:
+- Dark matter (open problem)
+- Dark energy / cosmological constant (open problem)
+- The number of fermion generations N_gen = 3 (open problem)
+- The baryon asymmetry η ≈ 6.1 × 10⁻¹⁰ (open problem)
+- The CMB power spectrum amplitude (open problem)
+- The SM gauge group or coupling constants
+
+Stating this explicitly is not weakness. It is the precondition for trusting what *is* derived.
 
 ---
 
-## What TUO Derives (Standard BB Assumes as Inputs)
-
-| Quantity | TUO Result | How |
-|---|---|---|
-| Equation of state w | = 1/3 | p = E/3 from v = c at emergence |
-| Hubble H(t_Pl) | = 1/(2t_Pl) exact | Wavepacket spreading formula |
-| Spatial flatness Ω | = 1 exactly | Axiom I (flat background) |
-| Total energy E_tot | = 0 exactly | Axiom II (zero-sum) |
-| Expansion law V(t) | (4π/3)l_Pl³[1+(ct/l_Pl)²]^(3/2) | Quantum wavepacket σ(t) |
-| Stability | No annihilation channel | No antiparticles → no pair to annihilate |
-
----
-
-## The Inflationary Structure
-
-The wavepacket σ(t) = l_Pl√(1+(ct/l_Pl)²) implies an effective equation of state:
+## Repository Structure
 
 ```
-w_eff(x) = -(1 + 2/x²)/3     where  x = ct/l_Pl
+TUO/
+├── README.md                    # This file
+├── paper/
+│   ├── tuo_paper.tex            # Full LaTeX source
+│   └── tuo_paper.pdf            # Compiled paper (27 pages)
+├── code/
+│   ├── tuo_theory.py            # All physics: constants, theorems, predictions
+│   └── tuo_simulation.py        # Emergence event simulation & particle cascade
+├── docs/
+│   ├── insights.md              # Deep analysis of TUO's novel contributions
+│   ├── glossary.md              # Definitions of all terms and symbols
+│   └── citations.bib            # Full BibTeX reference file
+└── notebooks/
+    └── tuo_verification.ipynb   # (optional) interactive verification
 ```
 
-| x = ct/l_Pl | w_eff | Phase |
-|---|---|---|
-| → 0 | → −∞ | Super-inflationary |
-| 1 (t = t_Pl) | **−1.000 exactly** | **de Sitter — without inflaton** |
-| 2 | −0.500 | |
-| 10 | −0.340 | |
-| → ∞ | → −1/3 | Radiation (FRW) |
-
-**The expansion is always accelerated** (σ̈ > 0, deceleration parameter q = −1/x² < 0 always) and **always sub-luminal** (v < c always, proven). From the SM-derived emergence time t* to the electroweak scale:
-
-```
-N_efolds(t* → T_EW) ≈ 76.4 e-folds
-```
-
-Standard inflation requires N ≥ 60. **TUO delivers 76 without an inflaton field, without a slow-roll potential, without super-luminal expansion.**
-
 ---
 
-## Key Numerical Results
-
-| Quantity | TUO value | Status |
-|---|---|---|
-| T_TUO | (15/π²)^(1/4) T_Pl = 1.1103 T_Pl | SM-derived |
-| t* (emergence) | 7.31 t_Pl | SM-derived |
-| E_cell | (g*/2) E_Pl = 1.04×10¹¹ J | Factor 15/π²=1.52 vs standard |
-| H(t_Pl) | 1/(2t_Pl) = 9.27×10⁴² s⁻¹ | Exact match FRW |
-| w_eff at t_Pl | −1.000 (de Sitter) | Derived |
-| N_efolds to EW | 76.4 | Exceeds inflation minimum |
-| v_max | < c (always) | Theorem |
-| ΔV/V | 3(l_Pl/ct)² | New prediction |
-| N_cells | ~8.8×10⁹² | Observable universe |
-| Saddle-point ratio | e^(8.8×10⁹²) | Simultaneous emergence dominance |
-
----
-
-## Why Physical Laws Are Equalities
-
-The zero-sum constraint (Axiom II) explains why fundamental equations are *equalities* rather than inequalities:
-
-- **G_μν = (8πG/c⁴) T_μν** — any inequality would imply net non-zero energy, violating Axiom II. The EFE are the local form of the zero-sum constraint for energy-momentum.
-- **iℏ ∂ψ/∂t = Ĥψ** — unitary evolution is the unique dynamics preserving ∫|ψ|² dx = 1 (probability zero-sum).
-- **Quantum entanglement** — the singlet state is required by the angular-momentum zero-sum. Bell inequality violations are direct measurements of Axiom II.
-
----
-
-## Backward Calculations from Observations
-
-| Observation | TUO reading |
-|---|---|
-| Ω = 1.0007 ± 0.0037 | TUO predicts Ω = 1 exact. Precision will converge to TUO's prediction. |
-| H₀ = 67.4 km/s/Mpc | Back-extrapolation gives H(t_Pl) = 1/(2t_Pl). TUO derives this independently. |
-| Y_p = 0.245 ± 0.003 | Same g*=106.75 → Y_p ≈ 0.247. Consistent. |
-| η = 6.12×10⁻¹⁰ | B−L=0: matter-only allowed; target n_B/s ≈ 1.03×10⁻¹¹ (open calculation). |
-| ΔT/T ~ 10⁻⁵ | Within-cell ΔE/E ~ 9.7%; needs ~4 decades GR suppression (highest-priority open problem). |
-
----
-
-## Open Problems
-
-| Problem | Status |
-|---|---|
-| Baryon asymmetry η = 6.12×10⁻¹⁰ | Qualitative only. Target: n_B/s ≈ 1.03×10⁻¹¹. Needs Planck-scale QFT. |
-| CMB power spectrum ΔT/T ~ 10⁻⁵ | Within-cell fluctuation calculation — highest priority. |
-| Dark energy Λ ~ 10⁻¹²² E_Pl⁴ | Zero-sum predicts Λ=0 at leading order. Residual needs QGD. |
-| SM particle content g*=106.75 | Used from experiment. Not yet derived from axioms. |
-| GR recovery | EFE structure consistent with Axiom II. Full derivation needs companion QGD. |
-
----
-
-## Repository Contents
-
-| File | Description |
-|---|---|
-| `tuo_v3.pdf` | 18-page paper (full matrix formalism, inflation section, ranked results, open problems) |
-| `tuo_complete_theory.py` | Canonical Python reference — all derivations with numbers |
-| `tuo_sim_v2.py` | 14-panel simulation (SM-derived scales, w_eff, e-folds, backward calculations) |
-| `tuo_evolution_v2.png` | Simulation output |
-| `TUO_INSIGHTS_v2.md` | Full physical interpretation of every result |
-
----
-
-## Run It
+## Quick Start
 
 ```bash
-# Print the complete theory with all SM-derived numerical verifications
-python tuo_complete_theory.py
+git clone https://github.com/matshaba/TUO.git
+cd TUO
 
-# Generate the 14-panel evolution simulation
-python tuo_sim_v2.py
-# Outputs: tuo_evolution_v2.png
+# Run theory verification
+python code/tuo_theory.py
 
-# Requirements
-pip install numpy matplotlib scipy
+# Run emergence simulation
+python code/tuo_simulation.py
 ```
+
+Requirements: Python ≥ 3.9, NumPy, SciPy, Matplotlib
+
+---
+
+## Key Numbers
+
+| Quantity | Value | Source |
+|---------|-------|--------|
+| E_cell | 1.044 × 10¹¹ J = 53.375 E_Pl | Axioms + g* |
+| T_TUO | 1.573 × 10³² K = 1.110 T_Pl | Axioms (g*-independent) |
+| E_total | 0 (exact) | G·M_Pl² = ℏc identity |
+| 15/π² | 1.5198... | Heisenberg/Stefan-Boltzmann ratio |
+| g* | 106.75 | Standard Model (28 bosons + 90×7/8 fermions) |
+| t_Pl | 5.391 × 10⁻⁴⁴ s | Planck units |
 
 ---
 
 ## Citation
 
 ```bibtex
-@article{matshaba2026tuo,
-  title   = {Universal Origins: The Zero-Sum Constraint —
-             Matrix Formulation of Cosmogenesis},
+@article{Matshaba2026_TUO,
   author  = {Matshaba, Romeo},
+  title   = {Universal Origins: The Zero-Sum Constraint ---
+             Matrix Formulation of Cosmogenesis},
   year    = {2026},
-  note    = {University of South Africa, Pretoria}
+  school  = {University of South Africa},
+  note    = {Preprint}
 }
 ```
 
 ---
 
-*TUO does not replace the Big Bang. It precedes it — and it delivers every initial condition the Big Bang needs, derived from two axioms and the Standard Model, with no free parameters.*
+## Author
+
+Romeo Matshaba  
+Department of Physics, University of South Africa (UNISA)  
+Pretoria, South Africa
+
+*Numerical verification: Claude (Anthropic), February 2026*
+
+---
+
+## License
+
+This work is made available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+You are free to share and adapt the material with appropriate attribution.
