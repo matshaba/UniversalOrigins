@@ -134,7 +134,7 @@ What TUO does not explain is why N_gen = 3. This is an open problem. What TUO *d
 1. Any N_gen configuration satisfying anomaly cancellation is a permitted stable universe
 2. Each has a different g* and therefore different E_cell, but the **same** T_TUO (g*-independence)
 3. The dimensionless ratios (α, α_s, mass hierarchies) differ across configurations
-4. The structural constants (c, ℏ, G) are the same in all configurations — they are fixed by the axioms, not by the particle content
+4. The structural constants (c, ℏ, G) are different in all configurations
 
 The "multiverse" of TUO is the space of anomaly-free SM-like theories. TUO does not predict which one we inhabit; it predicts that all of them share the same temperature at emergence.
 
