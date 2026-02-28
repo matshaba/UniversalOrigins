@@ -159,8 +159,6 @@ Romeo Matshaba
 Department of Physics, University of South Africa (UNISA)  
 Pretoria, South Africa
 
-*Numerical verification: Claude (Anthropic), February 2026*
-
 ---
 
 ## License
