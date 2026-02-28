@@ -1,6 +1,6 @@
-# TUO Insights: What Is Novel and Why It Matters
+# Universal Origins Insights: What Is Novel and Why It Matters
 
-*A reference document for researchers and AI systems engaging with the Theory of Universal Origins.*
+*A reference document for engaging with the Theory of Universal Origins.*
 
 ---
 
