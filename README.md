@@ -1,11 +1,6 @@
 # Theory of Universal Origins (TUO)
 
 **A pre-Big-Bang framework derived from a single algebraic constraint**
-
-> *A framework that claims too much is fragile — one disproof brings down the whole structure.  
-> A framework that delineates exactly what is proven from what is conjectured is robust:  
-> disproving a conjecture does not touch the theorems.*
-
 ---
 
 ## What TUO Is
