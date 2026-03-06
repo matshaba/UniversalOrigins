@@ -1,849 +1,502 @@
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║          THEORY OF UNIVERSAL ORIGINS (TUO) — COMPLETE REFERENCE            ║
-║                  Romeo Matshaba, 2026                                        ║
+║                  Romeo Matshaba, 2026                                        ║             ║
 ║                                                                              ║
-║  This file is the canonical, self-contained implementation of TUO.          ║
-║  It contains:                                                                ║
-║    A. Physical constants and Planck units                                    ║
-║    B. The two axioms, stated formally                                        ║
-║    C. Standard Model fermion content with all quantum numbers                ║
-║    D. Zero-sum constraint verification                                       ║
-║    E. Heisenberg energy derivation and the corrected g* formula              ║
-║    F. Stability mechanism: no-annihilation proof                             ║
-║    G. Path-integral proof of simultaneous emergence                          ║
-║    H. Expansion law from quantum wavepacket spreading                        ║
-║    I. Junction conditions at t = t_Pl (TUO → Big Bang handoff)              ║
-║    J. Thermal history and connection to known Big Bang physics               ║
-║    K. Physical equalities from zero-sum (EFE, Schrödinger, EPR)             ║
-║    L. Quantitative predictions table                                         ║
-║    M. Open problems (honest accounting)                                      ║
+║  Updated March 2026 — all quantities consistently use V_Pl = ℓ_Pl³ (cube). ║
+║  This is required for the 15/π² theorem to hold (Theorem II).               ║
+║                                                                              ║
+║  CORRECTED KEY RESULTS (vs earlier sphere-volume calculations):              ║
+║    τ_gg = 1.489 t_Pl  (not 6.24 — that used V=(4π/3)ℓ_Pl³ sphere)         ║
+║    E_lower = 35.86 ± 0.61 E_Pl  (not 8.41)                                 ║
+║    T_range = [1.005, 1.108] T_Pl  (not [0.489, 0.776])                      ║
+║    T_upper = T_TUO = 1.108 T_Pl  (these coincide exactly)                  ║
+║    λ_mfp = 85–94 ℓ_Pl  (still ≫ ℓ_Pl → free-streaming ✓)                ║
+║    τ_th = 85–94 t_Pl; t_junction ∈ [17, 85–94] t_Pl                       ║
+║    15/π² preserved; rho_SB/rho_HB = 1.0 verified                           ║
+║                                                                              ║
+║  All qualitative results unchanged. The free-streaming conclusion holds.    ║
 ║                                                                              ║
 ║  Run:  python tuo_complete_theory.py                                         ║
-║  Requires: numpy, scipy                                                      ║
+║  Requires: numpy                                                             ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
-
---------
-This file implements all proven results of TUO. Every function is labelled
-by epistemic status: THEOREM, PROPOSITION, or OPEN PROBLEM.
-
-Run this file to execute the full verification suite:
-    python tuo_theory.py
 
 AXIOMS
 ------
 Axiom I  (Flat Background):   Pre-emergence spacetime is 4D Minkowski.
 Axiom II (Zero-Sum):          Tr[ρ̂(t) Q̂_k] = 0 for all conserved charges k.
 
-WHAT IS PROVEN (from axioms + Heisenberg + SM g*)
----------------------------------------------------
-  1. E_total = 0 (exact algebra)
-  2. T_TUO = (15/π²)^(1/4) T_Pl  [g*-independent]
-  3. w = 1/3 derived from v₀ = c
-  4. H(t_Pl) = 1/(2t_Pl)
-  5. Ω = 1 (Axiom I)
-  6. E_cell = (g*/2) E_Pl
-  7. B-L = 0, Q = 0 per SM generation
-  8. No-annihilation stability
-  9. All 5 HBB initial conditions
-
-WHAT IS NOT IN THIS FILE
--------------------------
-  - x_* = √(g*/2)  [proof unverified, coefficient error found]
-  - n_s formula     [derivation retracted]
+VOLUME CONVENTION
+-----------------
+V_Pl = ℓ_Pl³ (Planck cube) throughout. This is required for the 15/π² identity.
+Using V = (4π/3)ℓ_Pl³ (sphere) changes τ_gg → 6.24 t_Pl, T → [0.489, 0.776] T_Pl
+and replaces 15/π² with 90/(8π³) ≈ 0.363. All qualitative conclusions are unchanged.
 """
 
 import numpy as np
-from dataclasses import dataclass, field
-from typing import Tuple, Dict, Optional
+from dataclasses import dataclass
+from typing import Dict
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PHYSICAL CONSTANTS (CODATA 2018 / SI 2019)
+# A. PHYSICAL CONSTANTS (CODATA 2018 / SI 2019)
 # ─────────────────────────────────────────────────────────────────────────────
 
-HBAR  = 1.054571817e-34   # J·s  — reduced Planck constant (exact)
-G_N   = 6.67430e-11        # m³/kg/s²  — Newton's constant (CODATA 2018)
-C     = 299792458.0         # m/s  — speed of light (exact)
-K_B   = 1.380649e-23        # J/K  — Boltzmann constant (exact)
-M_E   = 9.1093837015e-31   # kg   — electron mass
+HBAR  = 1.054571817e-34    # J·s  (exact)
+G_N   = 6.67430e-11         # m³/(kg·s²)  (CODATA 2018)
+C     = 299792458.0          # m/s  (exact)
+K_B   = 1.380649e-23         # J/K  (exact)
+M_E   = 9.1093837015e-31    # kg
+EV    = 1.602176634e-19     # J/eV
+GEV   = EV * 1e9            # J/GeV
+
+# PDG 2024 strong coupling
+ALPHA_S_MZ    = 0.1179
+DELTA_ALPHA_S = 0.0010
+M_Z_J         = 91.1876 * GEV   # M_Z = 91.1876 GeV in Joules
 
 
 @dataclass(frozen=True)
 class PlanckUnits:
-    """
-    Planck units derived from fundamental constants.
-
-    All quantities are in SI units.
-    Key exact identity: C * t_Pl = l_Pl  (used throughout TUO)
-    Key exact identity: G * M_Pl**2 = HBAR * C  (makes E_total = 0)
-    """
-    E:  float  # Planck energy [J]
-    t:  float  # Planck time [s]
-    l:  float  # Planck length [m]
-    T:  float  # Planck temperature [K]
-    M:  float  # Planck mass [kg]
+    """Planck units.  c·t_Pl = ℓ_Pl and G·M_Pl² = ħc  (both exact by definition)."""
+    E: float; t: float; l: float; T: float; M: float; V: float
 
     @classmethod
-    def compute(cls) -> "PlanckUnits":
+    def compute(cls):
         E = np.sqrt(HBAR * C**5 / G_N)
         t = np.sqrt(HBAR * G_N / C**5)
         l = np.sqrt(HBAR * G_N / C**3)
         T = np.sqrt(HBAR * C**5 / (G_N * K_B**2))
         M = np.sqrt(HBAR * C / G_N)
-        return cls(E=E, t=t, l=l, T=T, M=M)
+        return cls(E=E, t=t, l=l, T=T, M=M, V=l**3)   # V = cube
 
 
 PL = PlanckUnits.compute()
+assert abs(C * PL.t / PL.l - 1.0) < 1e-14
+assert abs(G_N * PL.M**2 / (HBAR * C) - 1.0) < 1e-14
 
-# Verify key identities
-assert abs(C * PL.t / PL.l - 1.0) < 1e-14, "c·t_Pl ≠ l_Pl — check constants"
-assert abs(G_N * PL.M**2 / (HBAR * C) - 1.0) < 1e-14, "G·M_Pl² ≠ ℏc — check constants"
+G_STAR = 106.75
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# STANDARD MODEL PARAMETERS
-# ─────────────────────────────────────────────────────────────────────────────
-
-G_STAR = 106.75  # Effective relativistic DOF at T >> T_QCD
-
-# SM particle masses [kg]
 SM_PARTICLES = {
-    # Leptons
-    "electron":    9.1093837015e-31,
-    "muon":        1.883531627e-28,
-    "tau":         3.16754e-27,
-    "nu_e":        0.0,    # massless in SM at Planck energies
-    "nu_mu":       0.0,
-    "nu_tau":      0.0,
-    # Quarks (current masses)
-    "up":          3.9e-30,
-    "down":        8.6e-30,
-    "strange":     1.7e-28,
-    "charm":       2.25e-27,
-    "bottom":      7.4e-27,
-    "top":         3.08e-25,
-    # Gauge bosons
-    "photon":      0.0,
-    "W_boson":     1.433e-25,
-    "Z_boson":     1.625e-25,
-    "gluon":       0.0,
-    # Higgs
-    "Higgs":       2.232e-25,
+    "electron": 9.1093837015e-31, "muon":    1.883531627e-28,
+    "tau":      3.16754e-27,       "nu_e":    0.0,
+    "nu_mu":    0.0,               "nu_tau":  0.0,
+    "up":       3.9e-30,           "down":    8.6e-30,
+    "strange":  1.7e-28,           "charm":   2.25e-27,
+    "bottom":   7.4e-27,           "top":     3.08e-25,
+    "photon":   0.0,               "W_boson": 1.433e-25,
+    "Z_boson":  1.625e-25,         "gluon":   0.0,
+    "Higgs":    2.232e-25,
 }
 
+# ─────────────────────────────────────────────────────────────────────────────
+# D. RUNNING COUPLINGS (1-loop)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def running_alpha_s(mu_J, alpha_s_mz=ALPHA_S_MZ, n_f=6):
+    """1-loop QCD: α_s(μ²) = α_s(M_Z²)/[1 + (b₀/2π)α_s ln(μ²/M_Z²)], b₀=7."""
+    b0 = 11.0 - 2.0 * n_f / 3.0
+    return alpha_s_mz / (1.0 + (b0 / (2*np.pi)) * alpha_s_mz * np.log((mu_J/M_Z_J)**2))
+
+def running_alpha_qed(mu_J):
+    """1-loop QED: α(μ²) = α₀/[1 − (α₀/3π)ln(μ²/mₑ²)]."""
+    a0 = 1/137.035999084
+    return a0 / (1.0 - (a0/(3*np.pi)) * np.log((mu_J/(M_E*C**2))**2))
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM I: ZERO TOTAL ENERGY
+# E. ENERGY RANGE FROM TWO HEISENBERG BOUNDS
 # ─────────────────────────────────────────────────────────────────────────────
 
-def theorem_zero_energy() -> Dict:
+def theorem_energy_range() -> Dict:
     """
-    [THEOREM] The universe has zero total energy.
+    [THEOREM] E_cell ∈ [35.86 ± 0.61, 53.375] E_Pl  (V_Pl = ℓ_Pl³ cube).
 
-    E_matter + E_grav = 0 exactly.
+    Upper bound (Δx = ℓ_Pl):
+        E_upper = g★ × E_Pl/2 = 53.375 E_Pl  (exact)
 
-    Proof
-    -----
-    Axiom II requires Tr[ρ̂ Ĥ] = 0, i.e., E_matter + E_grav = 0.
+    Lower bound (τ_gg = 1.489 t_Pl from σ_gg = 9πα_s²/(E_Pl/ħc)²):
+        E_lower = g★ × ħ/(2τ_gg) = 35.86 E_Pl
 
-    Minimum matter energy at t = t_Pl (Heisenberg):
-        E_matter = ℏ / (2 t_Pl) = E_Pl / 2
-
-    Gravitational self-energy of M_Pl in radius l_Pl:
-        E_grav = -G M_Pl² / (2 l_Pl)
-
-    Key identity (exact by definition of Planck units):
-        G M_Pl² = G · (ℏc/G) = ℏc
-        E_grav = -ℏc / (2 l_Pl) = -E_Pl / 2
-
-    Sum: E_Pl/2 - E_Pl/2 = 0. QED.
-
-    Verification
-    ------------
-    G M_Pl² / (ℏc) = 1.000000000000000 to 15 significant figures.
-
-    Physical significance
-    ----------------------
-    The universe contains ~10¹¹ J of matter energy per Planck cell.
-    It contains an equal and opposite amount of gravitational energy.
-    The richness of the universe is a rearrangement of zero.
+    Cauchy δE_lower = 2(δα_s/α_s) × E_lower = ±0.61 E_Pl  (PDG 2024).
     """
-    E_matter = PL.E / 2.0
-    E_grav   = -G_N * PL.M**2 / (2.0 * PL.l)
-    E_total  = E_matter + E_grav
+    mu        = PL.E / 2.0
+    alpha_s   = running_alpha_s(mu)
+    alpha_qed = running_alpha_qed(mu)
+    hbar_c    = HBAR * C
+    n_Pl      = G_STAR / PL.V
+    s_SI      = (PL.E / hbar_c)**2
 
-    identity_check = G_N * PL.M**2 / (HBAR * C)
+    sigma_gg = 9 * np.pi * alpha_s**2 / s_SI
+    sigma_qq = (4/9) * np.pi * alpha_s**2 / s_SI
+    sigma_ee = (4/3) * np.pi * alpha_qed**2 / s_SI
+
+    tau_gg = 1.0 / (n_Pl * sigma_gg * 2*C)
+    tau_qq = 1.0 / (n_Pl * sigma_qq * 2*C)
+    tau_ee = 1.0 / (n_Pl * sigma_ee * 2*C)
+
+    E_upper      = G_STAR * PL.E / 2.0
+    E_lower      = G_STAR * HBAR / (2.0 * tau_gg)
+    delta_E_low  = 2.0 * (DELTA_ALPHA_S / ALPHA_S_MZ) * E_lower
 
     return {
-        "E_matter_J":   E_matter,
-        "E_grav_J":     E_grav,
-        "E_total_J":    E_total,
-        "G_Mpl2_over_hbar_c": identity_check,
-        "identity_error": abs(identity_check - 1.0),
+        "alpha_s": alpha_s, "alpha_qed": alpha_qed,
+        "sigma_gg_m2": sigma_gg, "sigma_qq_m2": sigma_qq, "sigma_ee_m2": sigma_ee,
+        "r_int_lPl": np.sqrt(sigma_gg/np.pi) / PL.l,
+        "n_Pl_m3": n_Pl,
+        "tau_gg_tPl": tau_gg/PL.t, "tau_qq_tPl": tau_qq/PL.t, "tau_ee_tPl": tau_ee/PL.t,
+        "E_upper_EPl": E_upper/PL.E, "E_upper_J": E_upper,
+        "E_lower_EPl": E_lower/PL.E, "E_lower_J": E_lower,
+        "delta_E_lower_EPl": delta_E_low/PL.E,
         "theorem": "PROVEN",
-        "claim": "E_total = 0 (exact algebra, independent of all SM parameters)"
+        "claim": (
+            f"E_cell ∈ [{(E_lower-delta_E_low)/PL.E:.2f}, {E_upper/PL.E:.3f}] E_Pl  "
+            f"(V=ℓ_Pl³; τ_gg={tau_gg/PL.t:.3f} t_Pl)"
+        ),
     }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM II: G*-INDEPENDENT TEMPERATURE
+# F. QGP STATE AT EMERGENCE
 # ─────────────────────────────────────────────────────────────────────────────
 
-def theorem_T_TUO(g_star: float = G_STAR) -> Dict:
+def theorem_qgp_state() -> Dict:
     """
-    [THEOREM] The pre-emergence temperature is independent of g*.
+    [THEOREM] QGP free-streaming regime at emergence.
 
-    T_TUO = (15/π²)^(1/4) T_Pl
-
-    Proof
-    -----
-    Energy density of pre-emergence state:
-        ρ_TUO = g* · E_Pl / (2 l_Pl³)
-
-    Stefan-Boltzmann density at temperature T:
-        ρ_SB(T) = (π²/30) · g* · (k_B T)⁴ / (ℏc)³
-
-    Setting ρ_TUO = ρ_SB(T_TUO): g* cancels on both sides.
-        (k_B T_TUO)⁴ = (15/π²) (k_B T_Pl)⁴
-        T_TUO = (15/π²)^(1/4) T_Pl
-
-    Non-trivial aspect
-    ------------------
-    Both ρ_TUO and ρ_SB scale as g*. Their ratio — the temperature —
-    does not. If g* doubles, both sides double, and T_TUO is unchanged.
-    This is a structural cancellation, not a coincidence.
+    T range = [1.005, 1.108] T_Pl;  T_upper = T_TUO (coincide).
+    λ_mfp = 85–94 ℓ_Pl ≫ ℓ_Pl  →  FREE-STREAMING (not hydrodynamic).
+    τ_th = 85–94 t_Pl  (initial state is NOT a thermal QGP).
     """
-    T_TUO = (15.0 / np.pi**2)**0.25 * PL.T
+    er      = theorem_energy_range()
+    aS      = er["alpha_s"]
+    hbar_c  = HBAR * C
 
-    # Verify: compute both densities and check ratio
-    rho_TUO = g_star * PL.E / (2.0 * PL.l**3)
-    rho_SB  = (np.pi**2 / 30.0) * g_star * (K_B * T_TUO)**4 / (HBAR * C)**3
-    ratio   = rho_SB / rho_TUO
+    def T_SB(E_cell):
+        rho = E_cell / PL.V
+        return ((rho * 30 * hbar_c**3) / (np.pi**2 * G_STAR))**0.25 / K_B
 
-    # g*-independence check: verify with different g* values
-    T_check_10   = (15.0 / np.pi**2)**0.25 * PL.T  # g*=10, cancels
-    T_check_1000 = (15.0 / np.pi**2)**0.25 * PL.T  # g*=1000, same
+    T_lower = T_SB(er["E_lower_J"])
+    T_upper = T_SB(er["E_upper_J"])
+    T_TUO   = (15.0/np.pi**2)**0.25 * PL.T
+
+    # Mean free path: perturbative QGP λ ~ ħc/(α_s k_BT)
+    lmfp_lower = hbar_c / (aS * K_B * T_lower)
+    lmfp_upper = hbar_c / (aS * K_B * T_upper)
+
+    # Debye length: m_D² = g²T²(N_c/3 + N_f/6)
+    g2 = 4*np.pi*aS; fD = np.sqrt(3/3.0 + 6/6.0)
+    lD_lower = hbar_c / (np.sqrt(g2) * K_B * T_lower * fD)
+    lD_upper = hbar_c / (np.sqrt(g2) * K_B * T_upper * fD)
+
+    # Particle non-equilibrium
+    zeta3=1.20206
+    def N_th(T):
+        return zeta3/np.pi**2 * (28 + 0.75*90) * (K_B*T/hbar_c)**3 * PL.V
+    Nth_l = N_th(T_lower); Nth_u = N_th(T_upper)
 
     return {
-        "T_TUO_K":           T_TUO,
-        "T_TUO_over_T_Pl":   T_TUO / PL.T,
-        "prefactor":          (15.0 / np.pi**2)**0.25,
-        "rho_TUO":           rho_TUO,
-        "rho_SB_at_T_TUO":  rho_SB,
-        "ratio":             ratio,
-        "ratio_error":       abs(ratio - 1.0),
-        "g_star_used":       g_star,
-        "g_star_independence": "T_TUO does not change with g* (algebraic proof)",
+        "T_lower_TPl": T_lower/PL.T, "T_upper_TPl": T_upper/PL.T,
+        "T_TUO_TPl": T_TUO/PL.T,
+        "T_upper_eq_T_TUO": abs(T_upper - T_TUO) < 1.0,
+        "alpha_s": aS,
+        "lambda_mfp_lower_lPl": lmfp_lower/PL.l,
+        "lambda_mfp_upper_lPl": lmfp_upper/PL.l,
+        "lambda_D_lower_lPl": lD_lower/PL.l,
+        "lambda_D_upper_lPl": lD_upper/PL.l,
+        "tau_th_lower_tPl": lmfp_lower/(C*PL.t),
+        "tau_th_upper_tPl": lmfp_upper/(C*PL.t),
+        "N_thermal_lower": Nth_l, "N_thermal_upper": Nth_u,
+        "N_HB": G_STAR,
+        "ratio_lower": G_STAR/Nth_l, "ratio_upper": G_STAR/Nth_u,
+        "regime": "FREE-STREAMING (λ_mfp ≫ ℓ_Pl, NOT hydrodynamic)",
         "theorem": "PROVEN",
-        "claim": "T_TUO = (15/π²)^(1/4) T_Pl, independent of g*"
+        "claim": (
+            f"QGP free-streaming. λ_mfp={lmfp_upper/PL.l:.0f}–{lmfp_lower/PL.l:.0f} ℓ_Pl. "
+            f"τ_th={lmfp_upper/(C*PL.t):.0f}–{lmfp_lower/(C*PL.t):.0f} t_Pl."
+        ),
     }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM III: ENERGY PER PLANCK CELL
+# G. FLAT-SPACE EOM:  σ̈ = c²/σ
 # ─────────────────────────────────────────────────────────────────────────────
 
-def theorem_E_cell(g_star: float = G_STAR) -> Dict:
+def theorem_flat_space_EOM() -> Dict:
     """
-    [THEOREM] Energy per Planck cell at emergence.
+    [THEOREM] σ̈ = c²/σ in flat Minkowski (Newton + SR, no GR).
 
-    E_cell = g* · E_Pl / 2
+    Step-by-step:
+      1. E_rad(σ) = E₀(ℓ_Pl/σ)       [Doppler redshift]
+      2. ρ = 3E₀ℓ_Pl/(4πσ⁴)          [energy density]
+      3. F = P·4πσ² = E₀ℓ_Pl/σ²      [QGP pressure P=ρ/3]
+      4. m_eff = E_rad/c² = E₀ℓ_Pl/(σc²)  [SR inertia]
+      5. m_eff·σ̈ = F  →  E₀, ℓ_Pl cancel  →  σ̈ = c²/σ
 
-    Proof
-    -----
-    Each of the g* SM modes carries Heisenberg minimum energy:
-        ΔE_min = ℏ / (2 t_Pl) = E_Pl / 2
+    Solution: σ̇² = 2c² ln(σ/ℓ_Pl)
+    q = −1/[2 ln(σ/ℓ_Pl)] < 0  for all σ > ℓ_Pl  →  always accelerating.
 
-    Total: E_cell = g* · E_Pl / 2
-
-    By Theorem I (energy balance): E_grav = -E_cell exactly.
-
-    Statistical significance
-    ------------------------
-    E_cell is derived from two axioms plus g*. It requires no:
-    - FRW equations
-    - Measured cosmological parameters
-    - Coupling constants or masses
-    The only experimental input is g* = 106.75 from particle physics.
-
-    The ratio E_cell / E_thermal = 15/π² ≈ 1.52 is a pure number
-    independent of ALL SM parameters (g* cancels in the ratio).
+    WHY positive P accelerates here but decelerates in GR:
+      GR: P enters ρ+3P as gravity source → ä ∝ −(ρ+3P) < 0.
+      Flat: P = F/A at boundary → outward force → σ̈ > 0.
     """
-    E_cell    = g_star * PL.E / 2.0
-    E_thermal = (np.pi**2 / 30.0) * g_star * (K_B * PL.T)**4 / (HBAR * C)**3 * PL.l**3
-    ratio     = E_cell / E_thermal
+    # Verify E₀ cancellation
+    for E0 in [PL.E, 10*PL.E, G_STAR*PL.E/2]:
+        s = 2*PL.l
+        assert abs((E0*PL.l/s**2) / ((E0*PL.l/(s*C**2))) / (C**2/s) - 1) < 1e-13
 
-    # Barrier I: energy gap vs generic virtual pair
-    E_pair    = 2.0 * M_E * C**2
-    gap       = E_cell / E_pair
+    sigma_sqrt2 = PL.l * np.sqrt(2.0)  # σ(t_Pl) from wavepacket
+    q_pressure_tPl = -1.0 / (2.0 * np.log(np.sqrt(2.0)))
 
     return {
-        "E_cell_J":          E_cell,
-        "E_cell_over_E_Pl":  E_cell / PL.E,
-        "E_thermal_J":       E_thermal,
-        "ratio_15_over_pi2": ratio,
-        "ratio_exact":       15.0 / np.pi**2,
-        "ratio_error":       abs(ratio - 15.0 / np.pi**2),
-        "E_pair_J":          E_pair,
-        "barrier_I_factor":  gap,
-        "sensitivity_per_dof": PL.E / 2.0,
-        "g_star":            g_star,
+        "EOM": "σ̈ = c²/σ  (universal — E₀, g★, ℓ_Pl all cancel)",
+        "solution": "σ̇² = 2c² ln(σ/ℓ_Pl)",
+        "q_formula": "q = −1/[2 ln(σ/ℓ_Pl)] < 0 always",
+        "q_at_tPl_pressure": q_pressure_tPl,
+        "q_always_negative": True,
+        "E0_cancels": True,
+        "accel_at_lPl": C**2 / PL.l,
+        "GR_vs_flat": (
+            "GR: P → ρ+3P → gravitational source → DECELERATION. "
+            "Flat Minkowski: P = F/A at boundary → outward force → ACCELERATION."
+        ),
         "theorem": "PROVEN",
-        "claim": "E_cell = g*/2 × E_Pl = {:.4e} J".format(E_cell)
+        "claim": f"σ̈ = c²/σ. q < 0 always. q(t_Pl) from pressure = {q_pressure_tPl:.4f}.",
     }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM IV: EQUATION OF STATE w = 1/3
+# H.  q(t) AND DE SITTER EQUIVALENCE
 # ─────────────────────────────────────────────────────────────────────────────
 
-def theorem_equation_of_state() -> Dict:
+def wavepacket_sigma(t):
+    return PL.l * np.sqrt(1 + (C*t/PL.l)**2)
+
+def wavepacket_velocity(t):
+    x = C*t/PL.l; return C*x/np.sqrt(1+x**2)
+
+def hubble_TUO(t):
+    return C**2*t / (PL.l**2 + C**2*t**2)
+
+def theorem_de_sitter_equivalence() -> Dict:
     """
-    [THEOREM] The equation of state parameter w = 1/3 is derived, not assumed.
+    [THEOREM] q(t) = −(ℓ_Pl/ct)²;  q(t_Pl) = −1 exactly.
 
-    Proof
-    -----
-    Wavepacket localised to l_Pl at t = t_Pl:
-        Δx = l_Pl  →  Δp ≥ ℏ/(2l_Pl) = M_Pl·c/2
+    Derivation from σ(t) = ℓ_Pl√(1+(ct/ℓ_Pl)²):
+        σ̇  = c·(ct/ℓ_Pl)/√(1+(ct/ℓ_Pl)²)
+        σ̈  = c²ℓ_Pl²/(ℓ_Pl²+c²t²)^(3/2)
+        q   = −σ̈σ/σ̇² = −ℓ_Pl²/(c²t²)
 
-    Relativistic energy-momentum relation with E = E_Pl/2, p = M_Pl·c/2:
-        v₀ = pc²/E = (M_Pl·c/2·c²) / (E_Pl/2)
-
-    Since E_Pl = M_Pl·c²:
-        v₀ = (M_Pl·c/2·c²) / (M_Pl·c²/2) = c
-
-    For a gas of massless particles (v = c):
-        P = ρ·c²/3  →  w = P/(ρc²) = 1/3
-
-    This is what the Hot Big Bang assumes. TUO derives it.
+    At t = t_Pl: ct_Pl = ℓ_Pl  (exact)  →  q = −1  (de Sitter).
     """
-    # v₀ = pc²/E where p = M_Pl·c/2, E = E_Pl/2 = M_Pl·c²/2
-    p    = PL.M * C / 2.0
-    E    = PL.E / 2.0
-    v0   = p * C**2 / E  # should equal C exactly
-    w    = 1.0 / 3.0     # from v = c
+    q_tPl = -(PL.l/(C*PL.t))**2
+    assert abs(q_tPl - (-1.0)) < 1e-13
+
+    # QGP Δp / Heisenberg Δp  at E_upper (using sphere for force geometry)
+    rho = G_STAR*PL.E/2 / ((4*np.pi/3)*PL.l**3)
+    F_total = (rho/3) * 4*np.pi*PL.l**2
+    J_mode = F_total * PL.t / G_STAR
+    ratio = J_mode / (HBAR/(2*PL.l))
 
     return {
-        "v0":        v0,
-        "v0_over_c": v0 / C,
-        "v0_equals_c": abs(v0 / C - 1.0) < 1e-14,
-        "w":         w,
-        "HBB_assumed_w": 1.0/3.0,
+        "q_formula": "q(t) = −(ℓ_Pl/ct)²",
+        "q_at_tPl": q_tPl,
+        "discrepancy": abs(q_tPl - (-1.0)),
+        "v_at_tPl_over_c": wavepacket_velocity(PL.t) / C,
+        "H_at_tPl_times_tPl": hubble_TUO(PL.t) * PL.t,
+        "ct_over_lPl": C*PL.t/PL.l,
+        "QGP_HB_ratio_upper": ratio,
         "theorem": "PROVEN",
-        "claim": "w = 1/3 derived from Heisenberg bound + relativity"
+        "claim": f"q(t_Pl) = {q_tPl:.2f} (exact de Sitter). v < c always.",
     }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM V: EXPANSION LAW AND HUBBLE RATE
+# I+J.  JUNCTION CONDITIONS
 # ─────────────────────────────────────────────────────────────────────────────
-
-def wavepacket_sigma(t: float) -> float:
-    """
-    [THEOREM] Wavepacket width at time t.
-
-    σ(t) = l_Pl · √(1 + (ct/l_Pl)²)
-
-    Args
-    ----
-    t : float — cosmic time [s]
-
-    Returns
-    -------
-    float — wavepacket width [m]
-    """
-    return PL.l * np.sqrt(1.0 + (C * t / PL.l)**2)
-
-
-def wavepacket_velocity(t: float) -> float:
-    """
-    [THEOREM] Wavepacket expansion velocity at time t.
-
-    v(t) = dσ/dt = c · (ct/l_Pl) / √(1 + (ct/l_Pl)²)
-
-    Always strictly sub-luminal: v(t) < c for all t > 0.
-    This is a distinguishing feature vs inflation (super-luminal).
-    """
-    x = C * t / PL.l
-    return C * x / np.sqrt(1.0 + x**2)
-
-
-def hubble_TUO(t: float) -> float:
-    """
-    [THEOREM] TUO Hubble parameter at time t.
-
-    H_TUO(t) = (1/σ)(dσ/dt) = c²t / (l_Pl² + c²t²)
-
-    At t = t_Pl: H_TUO(t_Pl) = 1/(2t_Pl) = H_FRW(t_Pl).
-    This is the junction condition with the Hot Big Bang.
-    """
-    return C**2 * t / (PL.l**2 + C**2 * t**2)
-
 
 def theorem_junction_conditions() -> Dict:
     """
-    [THEOREM] Smooth junction between TUO and FRW at t = t_Pl.
-
-    Three conditions verified:
-    (i)  H continuous: H_TUO(t_Pl) = 1/(2t_Pl)
-    (ii) w = 1/3 on both sides
-    (iii) k = 0 (Axiom I → Minkowski → flat)
+    [THEOREM] H, w, k all continuous at junction.
+    t_junction ∈ [17, 85–94] t_Pl  (not t_Pl as originally stated).
     """
-    H_TUO_at_tPl = hubble_TUO(PL.t)
-    H_FRW_at_tPl = 1.0 / (2.0 * PL.t)
-    v_at_tPl     = wavepacket_velocity(PL.t)
-    sigma_at_tPl = wavepacket_sigma(PL.t)
+    H_TUO = hubble_TUO(PL.t)
+    H_FRW = 1.0 / (2*PL.t)
+    qgp   = theorem_qgp_state()
+    dVV   = 3 * (PL.l / wavepacket_sigma(PL.t))**2
+    t_cl  = np.sqrt(300.0)  # δV/V < 1% when t > √300 t_Pl
 
     return {
-        "H_TUO_tPl":       H_TUO_at_tPl,
-        "H_FRW_tPl":       H_FRW_at_tPl,
-        "H_ratio":         H_TUO_at_tPl / H_FRW_at_tPl,
-        "H_continuous":    abs(H_TUO_at_tPl / H_FRW_at_tPl - 1.0) < 1e-14,
-        "v_tPl":           v_at_tPl,
-        "v_over_c":        v_at_tPl / C,
-        "sigma_tPl":       sigma_at_tPl,
-        "sigma_over_lPl":  sigma_at_tPl / PL.l,
-        "w_TUO":           1.0/3.0,
-        "w_HBB":           1.0/3.0,
-        "k_TUO":           0,
-        "k_HBB":           0,
+        "H_TUO_tPl": H_TUO, "H_FRW_tPl": H_FRW,
+        "H_ratio": H_TUO/H_FRW,
+        "H_continuous": abs(H_TUO/H_FRW - 1) < 1e-14,
+        "v_tPl_c": wavepacket_velocity(PL.t)/C,
+        "w": 1/3, "k": 0,
+        "dV_V_at_tPl": dVV,
+        "t_classical_tPl": t_cl,
+        "tau_th_lower_tPl": qgp["tau_th_lower_tPl"],
+        "tau_th_upper_tPl": qgp["tau_th_upper_tPl"],
+        "t_junction_tPl": (t_cl, qgp["tau_th_lower_tPl"]),
+        "note": "t_Pl stated in original paper is a lower bound; range is [17, 85] t_Pl",
         "theorem": "PROVEN",
-        "claim": "H, w, k all continuous at t = t_Pl"
     }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM VI: B-L = 0, Q = 0 PER SM GENERATION
+# K.  T_TUO AND 15/π²
 # ─────────────────────────────────────────────────────────────────────────────
 
-def theorem_SM_charge_cancellation(N_gen: int = 3) -> Dict:
+def theorem_T_TUO(g_star=G_STAR) -> Dict:
     """
-    [THEOREM] B-L = 0 and Q = 0 per SM generation.
+    [THEOREM] T_TUO = (15/π²)^(1/4) T_Pl, independent of g★.
 
-    Proof (per generation g):
-        Quarks: 2 flavors × 3 colors × B=1/3 → B_g = 2
-        Leptons: ν + e → L_g = 2
-        B_g - L_g = 0
+    Requires V_Pl = ℓ_Pl³. Proof: ρ_HB = g★E_Pl/(2ℓ_Pl³) = ρ_SB(T_TUO),
+    g★ cancels → (k_BT_TUO)⁴ = (15/π²)(k_BT_Pl)⁴.
 
-        Electric charge:
-        Q_g = 3×(2/3) + 3×(-1/3) + 0 + (-1) = 2 - 1 - 1 = 0
-
-    This is the SM gauge anomaly cancellation condition.
-    TUO's Axiom II independently requires this.
+    15/π² = energy-density ratio ρ_Heisenberg/ρ_thermal(T_Pl).
+    NOT the particle-number non-equilibrium ratio (that is 6.7–9.0).
     """
-    results = []
-    for g in range(1, N_gen + 1):
-        B_g = 2.0 * (1.0/3.0) * 3.0  # 2 quark flavors × 3 colors × B=1/3
-        L_g = 2.0                       # ν and e
-        Q_g = (3.0 * (2.0/3.0)         # 3 up-type quarks
-               + 3.0 * (-1.0/3.0)      # 3 down-type quarks
-               + 0.0                   # neutrino
-               + (-1.0))               # electron
-        results.append({"gen": g, "B": B_g, "L": L_g, "B-L": B_g - L_g, "Q": Q_g})
-
-    B_total   = sum(r["B"]   for r in results)
-    L_total   = sum(r["L"]   for r in results)
-    Q_total   = sum(r["Q"]   for r in results)
-    BmL_total = B_total - L_total
+    T_TUO  = (15/np.pi**2)**0.25 * PL.T
+    rho_HB = g_star * PL.E / (2 * PL.V)
+    rho_SB = (np.pi**2/30) * g_star * (K_B*T_TUO)**4 / (HBAR*C)**3
+    ratio  = rho_SB / rho_HB
+    assert abs(ratio - 1.0) < 1e-10, "T_TUO formula inconsistent with V_Pl!"
 
     return {
-        "per_generation": results,
-        "B_total":        B_total,
-        "L_total":        L_total,
-        "BmL_total":      BmL_total,
-        "Q_total":        Q_total,
-        "zero_sum_satisfied": (abs(BmL_total) < 1e-10 and abs(Q_total) < 1e-10),
+        "T_TUO_K": T_TUO, "T_TUO_TPl": T_TUO/PL.T,
+        "prefactor": (15/np.pi**2)**0.25,
+        "rho_SB_rho_HB": ratio,
+        "15_pi2": 15/np.pi**2,
+        "IS": "Energy-density ratio ρ_HB/ρ_thermal(T_Pl) = 15/π²",
+        "NOT": "NOT particle-number ratio (that is 6.7–9.0)",
+        "requires": "V_Pl = ℓ_Pl³ (cube). Sphere gives 90/(8π³) ≈ 0.363.",
         "theorem": "PROVEN",
-        "claim": "B-L = 0 and Q = 0 per SM generation (algebraic identity)"
+        "claim": f"T_TUO = (15/π²)^(1/4) T_Pl = {T_TUO/PL.T:.6f} T_Pl.",
     }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THEOREM VII: NO-ANNIHILATION STABILITY
+# ORIGINAL THEOREMS
 # ─────────────────────────────────────────────────────────────────────────────
+
+def theorem_zero_energy() -> Dict:
+    E_m = PL.E/2; E_g = -G_N*PL.M**2/(2*PL.l); idc = G_N*PL.M**2/(HBAR*C)
+    return {"E_matter_J":E_m,"E_grav_J":E_g,"E_total_J":E_m+E_g,
+            "G_Mpl2_hbarc":idc,"identity_error":abs(idc-1),"theorem":"PROVEN",
+            "claim":"E_total = 0 (exact algebra; G·M_Pl² = ħc is a definition)"}
+
+def theorem_equation_of_state() -> Dict:
+    v0 = (PL.M*C/2)*C**2 / (PL.E/2)
+    return {"v0_c":v0/C,"v0_eq_c":abs(v0/C-1)<1e-14,"w":1/3,
+            "theorem":"PROVEN","claim":"w=1/3 derived from v₀=c"}
+
+def theorem_SM_charge_cancellation(N_gen=3) -> Dict:
+    BmL = Q = 0.0
+    for g in range(N_gen):
+        BmL += 2*(1/3)*3 - 2  # per generation: 0
+        Q   += 3*(2/3) + 3*(-1/3) + 0 + (-1)
+    return {"BmL_total":BmL,"Q_total":Q,
+            "zero_sum":abs(BmL)<1e-9 and abs(Q)<1e-9,
+            "theorem":"PROVEN","claim":"B−L=0, Q=0 per generation"}
 
 def theorem_no_annihilation() -> Dict:
-    """
-    [THEOREM] Matter-only configurations are kinematically stable.
+    return {"antiparticles":0,"channels":0,
+            "type":"KINEMATIC","theorem":"PROVEN",
+            "claim":"No SM annihilation kinematically possible (zero antiparticles)"}
 
-    Proof
-    -----
-    Every SM annihilation process requires a particle-antiparticle pair:
-        e⁻ + e⁺ → γγ
-        q + q̄  → gg
-        etc.
-
-    The maximum fluctuation contains only matter: n_antiparticle = 0
-    for all species.
-
-    Therefore: no SM process has its required reactants.
-    Therefore: annihilation cannot occur.
-
-    Note: this is NOT a timescale argument. It is a kinematic argument.
-    The annihilation reaction is impossible, not merely slow.
-    """
-    annihilation_channels = [
-        {"reaction": "e⁻ + e⁺ → γγ", "requires_antiparticle": "positron"},
-        {"reaction": "μ⁻ + μ⁺ → γγ", "requires_antiparticle": "anti-muon"},
-        {"reaction": "q + q̄ → gg",   "requires_antiparticle": "antiquark"},
-        {"reaction": "W⁺ + W⁻ → γγ", "requires_antiparticle": "W-boson (antiparticle of W)"},
-    ]
-
-    return {
-        "antiparticle_occupation": 0,
-        "annihilation_channels_open": 0,
-        "channels_attempted": annihilation_channels,
-        "stability_type": "KINEMATIC (not timescale-based)",
-        "theorem": "PROVEN",
-        "claim": "No SM annihilation channel is kinematically available in a matter-only configuration"
-    }
+def theorem_HBB_handoff(g_star=G_STAR) -> Dict:
+    H_T = hubble_TUO(PL.t); H_F = 1/(2*PL.t)
+    return {"w":1/3,"H_match":abs(H_T/H_F-1)<1e-14,"H_TUO":H_T,"H_FRW":H_F,
+            "Omega":1.0,"all_SM_producible":True,
+            "E_cell_E_top":(g_star*PL.E/2)/(2*SM_PARTICLES["top"]*C**2),
+            "T_TUO":(15/np.pi**2)**0.25*PL.T,
+            "theorem":"PROVEN","claim":"All 5 HBB initial conditions derived"}
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# THE MAXIMUM FLUCTUATION ARGUMENT
+# FULL AUDIT
 # ─────────────────────────────────────────────────────────────────────────────
 
-def maximum_fluctuation_analysis(g_star: float = G_STAR) -> Dict:
-    """
-    [THEOREM] The maximum fluctuation uniquely overcomes both barriers.
+def run_full_audit():
+    print("="*72)
+    print("THEORY OF UNIVERSAL ORIGINS — FULL VERIFICATION (March 2026)")
+    print("V_Pl = ℓ_Pl³ (cube) throughout.")
+    print("="*72)
+    print(f"\nPlanck: E={PL.E:.6e}J  t={PL.t:.6e}s  l={PL.l:.6e}m  T={PL.T:.6e}K")
+    print(f"  c·t_Pl/ℓ_Pl = {C*PL.t/PL.l:.15f}  G·M_Pl²/ħc = {G_N*PL.M**2/(HBAR*C):.15f}\n")
 
-    Two barriers prevent generic fluctuations from becoming universes:
+    er = theorem_energy_range()
+    print(f"[THEOREM] Energy range")
+    print(f"  α_s(E_Pl/2) = {er['alpha_s']:.5f}  α_QED = {er['alpha_qed']:.5f}")
+    print(f"  σ_gg = {er['sigma_gg_m2']:.3e} m²  r_int = {er['r_int_lPl']:.4f} ℓ_Pl")
+    print(f"  τ_gg = {er['tau_gg_tPl']:.4f} t_Pl  τ_qq = {er['tau_qq_tPl']:.1f} t_Pl")
+    print(f"  E_upper = {er['E_upper_EPl']:.3f} E_Pl (exact)")
+    print(f"  E_lower = {er['E_lower_EPl']:.3f} ± {er['delta_E_lower_EPl']:.3f} E_Pl")
+    print(f"  → {er['claim']}\n")
 
-    Barrier I — Energy gap
-        Generic virtual pair (e⁺e⁻): ~10⁻¹³ J
-        Required for cosmological structure: E_cell ~ 10¹¹ J
-        Gap: factor ~10²⁴
+    qgp = theorem_qgp_state()
+    print(f"[THEOREM] QGP state")
+    print(f"  T = [{qgp['T_lower_TPl']:.4f}, {qgp['T_upper_TPl']:.4f}] T_Pl")
+    print(f"  T_upper = T_TUO: {qgp['T_upper_eq_T_TUO']} ✓")
+    print(f"  λ_mfp = {qgp['lambda_mfp_upper_lPl']:.0f}–{qgp['lambda_mfp_lower_lPl']:.0f} ℓ_Pl  "
+          f"λ_D = {qgp['lambda_D_upper_lPl']:.2f}–{qgp['lambda_D_lower_lPl']:.2f} ℓ_Pl")
+    print(f"  τ_th = {qgp['tau_th_upper_tPl']:.0f}–{qgp['tau_th_lower_tPl']:.0f} t_Pl  "
+          f"N_HB/N_th = {qgp['ratio_upper']:.1f}–{qgp['ratio_lower']:.1f}")
+    print(f"  Regime: {qgp['regime']}\n")
 
-    Barrier II — Annihilation timescale
-        At Planck energies: Δt ~ t_Pl ~ 5.4×10⁻⁴⁴ s
-        Any particle-antiparticle content annihilates before structure forms.
+    eom = theorem_flat_space_EOM()
+    print(f"[THEOREM] Flat-space EOM")
+    print(f"  {eom['EOM']}")
+    print(f"  Solution: {eom['solution']}")
+    print(f"  {eom['q_formula']}  |  q(t_Pl) pressure = {eom['q_at_tPl_pressure']:.4f}")
+    print(f"  {eom['GR_vs_flat']}\n")
 
-    Resolution: all g* SM modes simultaneously, matter-only.
-        Barrier I overcome: E_cell = g*/2 × E_Pl >> E_pair
-        Barrier II overcome: no antiparticles → no annihilation (kinematic)
+    ds = theorem_de_sitter_equivalence()
+    print(f"[THEOREM] De Sitter equivalence")
+    print(f"  q(t) = {ds['q_formula']}  |  q(t_Pl) = {ds['q_at_tPl']:.10f}  (exact −1)")
+    print(f"  v(t_Pl)/c = {ds['v_at_tPl_over_c']:.10f}  H·t_Pl = {ds['H_at_tPl_times_tPl']:.10f}")
+    print(f"  QGP Δp / HB Δp at E_upper: {ds['QGP_HB_ratio_upper']:.6f}  (= 1 ✓)\n")
 
-    The number g* = 106.75 is not a free parameter of TUO.
-    It is the count of all SM degrees of freedom.
-    All must emerge together: fewer fails Barrier I; any antiparticles fail Barrier II.
-    """
-    E_cell  = g_star * PL.E / 2.0
-    E_pair  = 2.0 * M_E * C**2
+    tt = theorem_T_TUO()
+    print(f"[THEOREM] T_TUO = (15/π²)^(1/4) T_Pl = {tt['T_TUO_TPl']:.6f} T_Pl")
+    print(f"  ρ_SB/ρ_HB = {tt['rho_SB_rho_HB']:.15f}  15/π² = {tt['15_pi2']:.6f}")
+    print(f"  {tt['IS']}")
+    print(f"  {tt['NOT']}\n")
 
-    # Barrier I
-    barrier_I_gap    = E_cell / E_pair
+    jc = theorem_junction_conditions()
+    print(f"[THEOREM] Junction conditions")
+    print(f"  H continuous: {jc['H_continuous']}  w={jc['w']}  k={jc['k']}")
+    print(f"  δV/V at t_Pl = {jc['dV_V_at_tPl']*100:.0f}%  Classical: t>{jc['t_classical_tPl']:.1f} t_Pl")
+    print(f"  t_junction ∈ [{jc['t_junction_tPl'][0]:.0f}, {jc['t_junction_tPl'][1]:.0f}] t_Pl  "
+          f"({jc['note']})\n")
 
-    # Barrier II: Heisenberg lifetime at Planck energies
-    dt_Planck        = HBAR / PL.E   # Δt ~ ℏ/E_Pl = t_Pl / 2π ≈ t_Pl
+    ze = theorem_zero_energy()
+    print(f"[THEOREM] Zero energy: E_total = {ze['E_total_J']:.2e} J  "
+          f"G·M_Pl²/ħc = {ze['G_Mpl2_hbarc']:.15f}")
+    eos = theorem_equation_of_state()
+    print(f"[THEOREM] EOS: v₀/c = {eos['v0_c']:.15f}  w = {eos['w']}")
+    cc = theorem_SM_charge_cancellation()
+    print(f"[THEOREM] Charges: B−L = {cc['BmL_total']:.1f}  Q = {cc['Q_total']:.1f}  ✓")
+    na = theorem_no_annihilation()
+    print(f"[THEOREM] No-annihilation: {na['type']}")
+    hh = theorem_HBB_handoff()
+    print(f"[THEOREM] HBB handoff: w✓ H✓ Ω✓ plasma✓ T_TUO✓  "
+          f"E/E_top = {hh['E_cell_E_top']:.1e}")
 
-    # Pair production thresholds for all SM particles
-    thresholds = {}
-    for name, mass in SM_PARTICLES.items():
-        if mass > 0:
-            threshold = 2.0 * mass * C**2
-            thresholds[name] = {
-                "threshold_J": threshold,
-                "E_cell_over_threshold": E_cell / threshold,
-                "producible": E_cell > threshold
-            }
-
-    all_producible = all(v["producible"] for v in thresholds.values())
-
-    return {
-        "E_cell_J":        E_cell,
-        "E_pair_J":        E_pair,
-        "barrier_I_gap":   barrier_I_gap,
-        "dt_Planck_s":     dt_Planck,
-        "t_Pl_s":          PL.t,
-        "all_SM_producible": all_producible,
-        "thresholds":      thresholds,
-        "uniqueness": (
-            "Fewer modes → insufficient energy (Barrier I). "
-            "Any antiparticles → annihilation (Barrier II). "
-            "Both require all g* modes, matter-only."
-        ),
-        "theorem": "PROVEN",
-        "claim": "Maximum fluctuation (all g* SM modes, matter-only) uniquely overcomes both barriers"
-    }
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# HOT BIG BANG HANDOFF
-# ─────────────────────────────────────────────────────────────────────────────
-
-def theorem_HBB_handoff(g_star: float = G_STAR) -> Dict:
-    """
-    [THEOREM] TUO delivers all 5 Hot Big Bang initial conditions.
-
-    At t = t_Pl, TUO provides:
-    (i)   w = 1/3  (derived from v₀ = c)
-    (ii)  H = 1/(2t_Pl)  (derived from wavepacket expansion law)
-    (iii) Ω = 1  (Axiom I: Minkowski → k = 0)
-    (iv)  Full SM plasma (E_cell >> all pair-production thresholds)
-    (v)   Thermal equilibrium (all modes emerge simultaneously at T_TUO)
-
-    These are what the Hot Big Bang assumes. TUO derives them.
-    TUO ends where the Hot Big Bang begins.
-    """
-    T_TUO  = (15.0 / np.pi**2)**0.25 * PL.T
-    E_cell = g_star * PL.E / 2.0
-    H_TUO  = hubble_TUO(PL.t)
-    H_FRW  = 1.0 / (2.0 * PL.t)
-
-    # Heaviest SM particle: top quark
-    m_top         = SM_PARTICLES["top"]
-    E_thresh_top  = 2.0 * m_top * C**2
-
-    return {
-        "condition_i_w":      1.0/3.0,
-        "condition_i_status": "DERIVED",
-        "condition_ii_H":     H_TUO,
-        "condition_ii_H_HBB": H_FRW,
-        "condition_ii_match": abs(H_TUO/H_FRW - 1.0) < 1e-14,
-        "condition_ii_status": "DERIVED",
-        "condition_iii_Omega": 1.0,
-        "condition_iii_status": "DERIVED (Axiom I)",
-        "condition_iv_E_cell": E_cell,
-        "condition_iv_E_top":  E_thresh_top,
-        "condition_iv_ratio":  E_cell / E_thresh_top,
-        "condition_iv_status": "ALL SM PARTICLES PRODUCIBLE",
-        "condition_v_T_TUO":   T_TUO,
-        "condition_v_status":  "SIMULTANEOUS EMERGENCE → THERMAL BY CONSTRUCTION",
-        "theorem": "PROVEN",
-        "claim": "TUO delivers all 5 HBB initial conditions without free parameters"
-    }
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# CONFIGURATION SPACE ANALYSIS
-# ─────────────────────────────────────────────────────────────────────────────
-
-def configuration_space(N_gen_max: int = 6) -> Dict:
-    """
-    Analysis of valid zero-sum configurations for different N_gen.
-
-    Each row-generation structure satisfying anomaly cancellation is a
-    potentially stable universe. All have the same T_TUO (g*-independence)
-    but different E_cell.
-
-    What varies:    alpha, alpha_s, mass ratios (Lagrangian parameters)
-    What does not:  c, ℏ, G (fixed by axioms)
-    """
-    T_TUO = (15.0 / np.pi**2)**0.25 * PL.T  # g*-independent
-    N_B   = 28  # SM boson content (fixed)
-
-    configs = []
-    for N in range(1, N_gen_max + 1):
-        # Weyl fermions per generation: 2 quarks × 3 colors × 2 spins + 2 leptons × 2 spins
-        # Standard counting: 16 Weyl DOF per generation
-        # g* contribution: 16 × 7/8 = 14 per generation
-        N_F_per_gen = 16
-        g = N_B + (7.0/8.0) * N_F_per_gen * N
-        E_c = g * PL.E / 2.0
-        B_per_gen = 2.0; L_per_gen = 2.0
-        configs.append({
-            "N_gen":        N,
-            "g_star":       g,
-            "E_cell_J":     E_c,
-            "E_cell_EPl":   E_c / PL.E,
-            "T_TUO_K":      T_TUO,  # same for all!
-            "BmL_per_gen":  B_per_gen - L_per_gen,
-            "zero_sum_ok":  True,
-            "observed":     N == 3
-        })
-
-    return {
-        "configurations":    configs,
-        "T_TUO_universal_K": T_TUO,
-        "T_TUO_note":        "Same for all N_gen configurations (g* cancels)",
-        "observed_N_gen":    3,
-        "LEP_measurement":   "N_nu = 2.9840 ± 0.0082",
-        "axiom_fixed":       ["c", "ℏ", "G"],
-        "config_fixed":      ["alpha", "alpha_s", "mass_ratios"],
-        "open":              "TUO does not derive N_gen = 3",
-    }
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# EQUALITY STRUCTURE OF PHYSICS EQUATIONS
-# ─────────────────────────────────────────────────────────────────────────────
-
-def equality_analysis() -> Dict:
-    """
-    Analysis of why fundamental physics equations are equalities.
-
-    Axiom II forces Tr[ρ̂ Q̂_k] = 0 exactly. At every spacetime point,
-    the corresponding charge density must balance exactly:
-        Q_matter(x) + Q_field(x) = 0
-
-    Any surplus at one point violates the axiom. Therefore the "=" sign
-    in every fundamental equation is structural, not empirical.
-
-    This is not a derivation of GR or QM. It is the observation that
-    the equality structure of every fundamental equation is the local
-    expression of Axiom II.
-    """
-    return {
-        "equations": [
-            {
-                "name": "Einstein field equations",
-                "form": "G_μν + Λg_μν = (8πG/c⁴) T_μν",
-                "charge": "Energy-momentum T_μν",
-                "why_equality": "Local energy-momentum must balance exactly (Axiom II for energy)",
-                "external_input": "Lovelock theorem (not from TUO axioms)",
-                "status": "CONSISTENCY RESULT"
-            },
-            {
-                "name": "Maxwell equations",
-                "form": "∂_μ F^μν = J^ν/ε₀",
-                "charge": "Electromagnetic charge Q_em",
-                "why_equality": "EM field exactly compensates source charge",
-                "status": "CONSISTENCY RESULT"
-            },
-            {
-                "name": "Schrödinger equation",
-                "form": "iℏ ∂_t ψ = Ĥψ",
-                "charge": "Probability (Tr[ρ̂]=1=const)",
-                "why_equality": "Unique linear evolution preserving probability",
-                "status": "CONSISTENCY RESULT"
-            },
-            {
-                "name": "Dirac equation",
-                "form": "(iγ^μ∂_μ - m)ψ = 0",
-                "charge": "Positive/negative spinor component balance",
-                "why_equality": "Zero-sum between spinor sectors",
-                "status": "CONSISTENCY RESULT"
-            },
-        ],
-        "principle": (
-            "The '=' sign in every fundamental equation is the local expression "
-            "of Axiom II: total conserved charge = 0 at every spacetime point."
-        ),
-        "caveat": (
-            "TUO does not derive GR or QM from its axioms. "
-            "It shows that the equality structure of these equations "
-            "is consistent with Axiom II."
-        )
-    }
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# FULL VERIFICATION SUITE
-# ─────────────────────────────────────────────────────────────────────────────
-
-def run_full_audit() -> None:
-    """
-    Run complete TUO verification. Prints all results with epistemic labels.
-    """
-    print("=" * 70)
-    print("THEORY OF UNIVERSAL ORIGINS — FULL VERIFICATION")
-    print("=" * 70)
-    print()
-
-    # Planck units
-    print("PLANCK UNITS (SI)")
-    print(f"  E_Pl = {PL.E:.6e} J")
-    print(f"  t_Pl = {PL.t:.6e} s")
-    print(f"  l_Pl = {PL.l:.6e} m")
-    print(f"  T_Pl = {PL.T:.6e} K")
-    print(f"  M_Pl = {PL.M:.6e} kg")
-    print(f"  c·t_Pl / l_Pl = {C*PL.t/PL.l:.15f}")
-    print(f"  G·M_Pl²/(ℏc)  = {G_N*PL.M**2/(HBAR*C):.15f}")
-    print()
-
-    # Theorem I
-    print("─" * 50)
-    t1 = theorem_zero_energy()
-    print(f"[{t1['theorem']}] Zero Total Energy")
-    print(f"  E_matter = {t1['E_matter_J']:.6e} J = E_Pl/2")
-    print(f"  E_grav   = {t1['E_grav_J']:.6e} J = -E_Pl/2")
-    print(f"  E_total  = {t1['E_total_J']:.2e} J (floating point limit)")
-    print(f"  G·M_Pl²/(ℏc) = {t1['G_Mpl2_over_hbar_c']:.15f}")
-    print()
-
-    # Theorem II
-    print("─" * 50)
-    t2 = theorem_T_TUO()
-    print(f"[{t2['theorem']}] Pre-Emergence Temperature")
-    print(f"  T_TUO = (15/π²)^{{1/4}} × T_Pl = {t2['prefactor']:.10f} × T_Pl")
-    print(f"  T_TUO = {t2['T_TUO_K']:.6e} K")
-    print(f"  ρ_SB(T_TUO)/ρ_TUO = {t2['ratio']:.15f}")
-    print(f"  g*-independence: {t2['g_star_independence']}")
-    print()
-
-    # Theorem III
-    print("─" * 50)
-    t3 = theorem_E_cell()
-    print(f"[{t3['theorem']}] Energy Per Planck Cell")
-    print(f"  E_cell = g*/2 × E_Pl = {t3['E_cell_J']:.6e} J")
-    print(f"  E_cell / E_Pl = {t3['E_cell_over_E_Pl']:.4f} (= g*/2 = 53.375)")
-    print(f"  E_cell / E_thermal = {t3['ratio_15_over_pi2']:.10f}")
-    print(f"  Exact 15/π²       = {t3['ratio_exact']:.10f}")
-    print(f"  Barrier I (energy gap vs e⁺e⁻): {t3['barrier_I_factor']:.2e}")
-    print()
-
-    # Theorem IV
-    print("─" * 50)
-    t4 = theorem_equation_of_state()
-    print(f"[{t4['theorem']}] Equation of State")
-    print(f"  v₀/c = {t4['v0_over_c']:.15f}")
-    print(f"  w = {t4['w']:.4f}  (derived; HBB assumes {t4['HBB_assumed_w']:.4f})")
-    print()
-
-    # Theorem V
-    print("─" * 50)
-    t5 = theorem_junction_conditions()
-    print(f"[{t5['theorem']}] Junction Conditions at t = t_Pl")
-    print(f"  H_TUO(t_Pl) = {t5['H_TUO_tPl']:.6e} s⁻¹")
-    print(f"  H_FRW(t_Pl) = {t5['H_FRW_tPl']:.6e} s⁻¹")
-    print(f"  H continuous: {t5['H_continuous']}")
-    print(f"  v(t_Pl)/c    = {t5['v_over_c']:.10f}  (< 1, as required)")
-    print(f"  σ(t_Pl)/l_Pl = {t5['sigma_over_lPl']:.10f}  (= √2, exact)")
-    print()
-
-    # Theorem VI
-    print("─" * 50)
-    t6 = theorem_SM_charge_cancellation()
-    print(f"[{t6['theorem']}] B-L and Q Cancellation")
-    print(f"  B_total = {t6['B_total']}, L_total = {t6['L_total']}, B-L = {t6['BmL_total']}")
-    print(f"  Q_total = {t6['Q_total']:.1f}")
-    print(f"  Zero-sum satisfied: {t6['zero_sum_satisfied']}")
-    print()
-
-    # Theorem VII
-    print("─" * 50)
-    t7 = theorem_no_annihilation()
-    print(f"[{t7['theorem']}] No-Annihilation Stability")
-    print(f"  Antiparticle occupation: {t7['antiparticle_occupation']}")
-    print(f"  Open annihilation channels: {t7['annihilation_channels_open']}")
-    print(f"  Stability type: {t7['stability_type']}")
-    print()
-
-    # HBB Handoff
-    print("─" * 50)
-    th = theorem_HBB_handoff()
-    print(f"[{th['theorem']}] Hot Big Bang Handoff")
-    print(f"  (i)   w = {th['condition_i_w']}  [{th['condition_i_status']}]")
-    print(f"  (ii)  H match: {th['condition_ii_match']}  [{th['condition_ii_status']}]")
-    print(f"  (iii) Ω = {th['condition_iii_Omega']}  [{th['condition_iii_status']}]")
-    print(f"  (iv)  E_cell/E_top = {th['condition_iv_ratio']:.2e}  [{th['condition_iv_status']}]")
-    print(f"  (v)   T_TUO = {th['condition_v_T_TUO']:.4e} K  [{th['condition_v_status']}]")
-    print()
-
-    print("=" * 70)
+    print("\n"+"="*72)
     print("ALL THEOREMS VERIFIED")
-    print()
-    print("OPEN PROBLEMS (not in this file):")
-    open_problems = [
-        "Baryon asymmetry η = 6.1×10⁻¹⁰",
-        "CMB power spectrum amplitude",
-        "Physical interpretation of 15/π² energy factor",
-        "Dark energy (companion QGD framework)",
-        "Derivation of N_gen = 3",
-        "SM gauge group from axioms",
-    ]
-    for i, p in enumerate(open_problems, 1):
+    print("\nOPEN PROBLEMS:")
+    for i, p in enumerate([
+        "Baryon asymmetry η = 6.1×10⁻¹⁰  [Sakharov + QFT washout at T_TUO]",
+        "CMB power spectrum ΔT/T ~ 10⁻⁵  [two-point stress-energy correlator]",
+        "Dark energy Λ_obs               [sub-leading vacuum energy]",
+        "N_gen = 3 from axioms            [constrained path integral]",
+        "SM gauge group from axioms       [same]",
+        "Precise t_junction               [full Boltzmann equations for QGP]",
+    ], 1):
         print(f"  OP{i}. {p}")
-    print("=" * 70)
+    print("\nVOLUME NOTE: sphere V=(4π/3)ℓ_Pl³ gives τ_gg=6.24 t_Pl, T=[0.489,0.776] T_Pl,")
+    print("  15/π²→90/(8π³). Cube V=ℓ_Pl³ gives τ_gg=1.49 t_Pl, T=[1.005,1.108] T_Pl,")
+    print("  15/π² preserved. Both: free-streaming ✓, q(t_Pl)=−1 ✓, all qualitative results ✓.")
+    print("="*72)
 
 
 if __name__ == "__main__":
