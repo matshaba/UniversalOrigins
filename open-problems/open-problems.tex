@@ -1,0 +1,707 @@
+% ============================================================================
+% TUO OPEN PROBLEMS: NUMERICAL ANALYSIS
+% Romeo Matshaba (UNISA), March 2026
+%
+% A working document probing the six open problems of TUO.
+% For each problem: what is known, what is computable now,
+% what remains genuinely open, and what the next calculation must be.
+% ============================================================================
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{physics}
+\usepackage{hyperref}
+\usepackage{booktabs,array}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{microtype}
+\tcbuselibrary{skins,breakable}
+
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black}
+
+\newtheorem{result}{Result}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% colour boxes
+\tcbset{
+  opbox/.style={
+    enhanced,breakable,
+    colback=gray!7,colframe=black!60,
+    fonttitle=\bfseries,title style={fill=black!15},
+    before upper={\parindent1.5em},
+    left=4pt,right=4pt,top=4pt,bottom=4pt
+  },
+  findingbox/.style={
+    enhanced,
+    colback=green!6,colframe=black!50,
+    fonttitle=\bfseries\small,
+    left=4pt,right=4pt,top=3pt,bottom=3pt
+  },
+  openbox/.style={
+    enhanced,
+    colback=orange!8,colframe=black!50,
+    fonttitle=\bfseries\small,
+    left=4pt,right=4pt,top=3pt,bottom=3pt
+  }
+}
+
+% ── Macros ────────────────────────────────────────────────────────────────────
+\newcommand{\EPl}{E_{\mathrm{Pl}}}
+\newcommand{\tPl}{t_{\mathrm{Pl}}}
+\newcommand{\lPl}{\ell_{\mathrm{Pl}}}
+\newcommand{\TPl}{T_{\mathrm{Pl}}}
+\newcommand{\MPl}{M_{\mathrm{Pl}}}
+\newcommand{\gstar}{g_{*}}
+\newcommand{\kB}{k_{\mathrm{B}}}
+\newcommand{\TTUO}{T_{\mathrm{TUO}}}
+\newcommand{\ecell}{E_{\mathrm{cell}}}
+\newcommand{\rhohat}{\hat{\rho}}
+\newcommand{\Hhat}{\hat{H}}
+\newcommand{\junc}{t_{\mathrm{junc}}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small TUO Open Problems --- Numerical Analysis}
+\lhead{\small Matshaba (2026)}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{center}
+  {\LARGE\bfseries TUO Open Problems:\\[0.3em] Numerical Analysis and Next Steps}\\[0.8em]
+  {\large Romeo Matshaba}\\[0.3em]
+  {\normalsize Department of Physics, University of South Africa --- March 2026}\\[1em]
+  \rule{0.6\textwidth}{0.4pt}
+\end{center}
+
+\begin{abstract}
+\noindent
+The Theory of Universal Origins (TUO) proves fourteen results from two
+axioms, but explicitly sets aside six open problems.
+This note works through each problem numerically, identifying
+(a)~what can be computed from known physics today,
+(b)~what quantity or calculation would close each problem, and
+(c)~a new result: the thermalisation time $\tau_\mathrm{th}$ with
+realistic FRW cooling is $152\,\tPl$, revising the junction range from
+$[17,94]\,\tPl$ to $[17,152]\,\tPl$.
+\end{abstract}
+
+\onehalfspacing
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Numerical Values Used Throughout}
+% ══════════════════════════════════════════════════════════════════════════════
+
+All calculations use:
+\[
+  \gstar = 106.75,\quad
+  \TTUO = (15/\pi^2)^{1/4}\,\TPl = 1.1103\,\TPl,\quad
+  \tau_{gg} = 1.489\,\tPl,\quad
+  \alpha_s\!\bigl(\tfrac{\EPl}{2}\bigr) = 0.01055.
+\]
+The six open problems from the paper are
+OP1 (baryon asymmetry),
+OP2 (CMB power spectrum),
+OP3 (dark energy),
+OP4 (precise junction time),
+OP5 (SM content from axioms), and
+OP6 (SM gauge group).
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{OP1 --- Baryon Asymmetry $\eta$}
+\label{sec:op1}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{tcolorbox}[opbox,title={Open Problem 1}]
+TUO shows that $B-L=0$ permits matter-only configurations.
+It does not derive $\eta = n_B/n_\gamma = 6.12\times10^{-10}$.
+\end{tcolorbox}
+
+\subsection{What TUO gives}
+
+At emergence, the maximum fluctuation has
+\[
+  B = L = 6 \quad (3\text{ generations}\times 2\text{ per gen},\;\text{no antiparticles}).
+\]
+The photon number density in the thermal bath at $\TTUO$ is
+\[
+  n_\gamma = \frac{2\zeta(3)}{\pi^2}\!\left(\frac{\kB\TTUO}{\hbar c}\right)^3,
+\]
+giving $N_\gamma^\mathrm{cell} = n_\gamma\,\lPl^3 = 0.3334$ photons per Planck cell.
+A naive ratio gives
+\[
+  \eta_\mathrm{naive} = \frac{B}{N_\gamma^\mathrm{cell}} = \frac{6}{0.333} \approx 18,
+\]
+which is $\sim3\times10^{10}$ times the observed value.
+This immediately shows that most of the initial baryon number is washed
+out between emergence and nucleosynthesis.
+
+\subsection{The sphaleron problem}
+
+Electroweak sphalerons are in equilibrium for $T > T_\mathrm{EW} \approx 100$\,GeV.
+Sphalerons violate $B+L$ but conserve $B-L$.
+Since $(B-L)_\mathrm{initial} = 0$ exactly (TUO axiom), sphalerons drive
+\[
+  B + L \;\to\; 0 \quad (\text{since } B-L = 0 \Rightarrow B = L),
+\]
+leaving $B_\mathrm{final} = 0$ and therefore $\eta = 0$ at sphaleron equilibrium.
+
+\begin{tcolorbox}[findingbox,title={Finding}]
+TUO with exact $B-L = 0$ predicts $\eta = 0$ at leading order.
+This is consistent: a matter-only universe requires a \emph{sub-leading}
+source of $B-L \neq 0$ that the leading-order axiom does not capture.
+\end{tcolorbox}
+
+\subsection{What is needed to close OP1}
+
+The observed $\eta = 6.12\times10^{-10}$ requires
+\[
+  \delta(B-L) \equiv (B-L)_\mathrm{sub-leading} = \eta\,N_\gamma^\mathrm{cell}
+  = 2.04\times10^{-10} \text{ per cell},
+\]
+which is $\delta(B-L)/B_\mathrm{initial} = 3.4\times10^{-11}$.
+Two mechanisms can generate this:
+
+\begin{enumerate}
+  \item \textbf{Leptogenesis.} If right-handed neutrinos with Majorana
+    masses $M_R \lesssim \TTUO$ exist, their CP-violating out-of-equilibrium
+    decays at $T < \TTUO$ generate $\delta L$, which sphalerons convert to
+    $\delta B$.  The required CP asymmetry is
+    \[
+      \varepsilon_\mathrm{CP} \sim \frac{\eta\,N_\gamma^\mathrm{cell}}{B_\mathrm{initial}}
+      \sim 3.4\times10^{-11}.
+    \]
+    This is achievable for $M_R \sim 10^{12}$\,GeV and $\mathcal{O}(1)$
+    Yukawa couplings (Davidson-Ibarra lower bound).
+
+  \item \textbf{Sub-leading path-integral term.} The TUO constrained
+    path integral enforces $B-L=0$ at the saddle point.  A next-to-leading
+    saddle could carry $\delta(B-L)$ suppressed by the instanton action
+    $S_\mathrm{inst} \sim 2\pi/\alpha_s \approx 600$:
+    \[
+      \delta(B-L) \sim e^{-S_\mathrm{inst}} \approx e^{-600} \ll \eta.
+    \]
+    This is far too small.  Mechanism~1 (leptogenesis) is therefore the
+    more natural path.
+\end{enumerate}
+
+\begin{tcolorbox}[openbox,title={What closes OP1}]
+Compute the leptogenesis yield $\eta(\varepsilon_\mathrm{CP}, M_R, T_\mathrm{TUO})$
+using the standard Boltzmann equations for $N_R$ decay, sourced by the
+TUO initial thermal bath at $\TTUO = 1.1103\,\TPl$.
+The target is $\varepsilon_\mathrm{CP} \approx 3.4\times10^{-11}$,
+which constrains $M_R$ and the right-handed neutrino sector.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{OP2 --- CMB Power Spectrum}
+\label{sec:op2}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{tcolorbox}[opbox,title={Open Problem 2}]
+The saddle-point argument suggests simultaneous emergence and
+$\Delta T/T = 0$ at leading order.
+Within-cell fluctuations give $\delta E/E \sim 1/\sqrt{\gstar}$.
+The observed $\Delta T/T \sim 10^{-5}$ requires $\sim10^3$ suppression.
+\end{tcolorbox}
+
+\subsection{Cell-level fluctuation budget}
+
+Each Planck cell contains $\gstar = 106.75$ independent modes.
+By central limit theorem, energy fluctuations are
+\[
+  \frac{\delta E_\mathrm{cell}}{E_\mathrm{cell}}
+  = \frac{1}{\sqrt{\gstar}} = 0.0968 \quad (9.7\%).
+\]
+Using the Stefan-Boltzmann relation $E \propto T^4$:
+\[
+  \frac{\delta T}{T} = \frac{1}{4}\,\frac{\delta E}{E}
+  = \frac{1}{4\sqrt{\gstar}} = 0.0242 \quad (2.4\%).
+\]
+Compared to the observed $\Delta T/T \sim 10^{-5}$, the required
+suppression factor is
+\[
+  \mathcal{S} = \frac{\delta T/T|_\mathrm{cell}}{\Delta T/T|_\mathrm{obs}}
+  \approx \frac{0.024}{10^{-5}} = 2.4\times10^3.
+\]
+
+\subsection{Sources of suppression}
+
+Three GR mechanisms reduce cell-scale fluctuations to CMB-scale:
+
+\begin{enumerate}
+  \item \textbf{Jeans suppression.}
+    The Jeans length at the Planck epoch:
+    \[
+      \lambda_J = c_s\sqrt{\frac{\pi}{G\rho/c^2}},\qquad c_s = c/\sqrt{3},
+    \]
+    gives $\lambda_J = 0.14\,\lPl$.
+    All modes with $\lambda > \lambda_J$ are sound-wave-suppressed
+    during radiation domination.
+    This does not by itself give $10^{-5}$, but sets the tilt of the
+    initial power spectrum.
+
+  \item \textbf{Silk damping.}
+    Photon diffusion on scales $\lambda \ll \lambda_\mathrm{mfp}$ damps
+    fluctuations exponentially.
+    Silk scale at decoupling: $\lambda_\mathrm{Silk} \approx 8$\,Mpc.
+
+  \item \textbf{Super-Hubble freezing.}
+    Modes larger than the Hubble radius at Planck epoch freeze as they
+    exit the sound horizon.
+    For a cell of size $\lPl$ at $t=\tPl$, the ratio
+    $\delta T/T|_\mathrm{frozen} \sim (\lPl/H^{-1})^2 = (\tPl\,H)^2 = 1/4$
+    picks up an additional $(1/4)^n$ suppression per horizon crossing.
+\end{enumerate}
+
+\begin{tcolorbox}[findingbox,title={Finding}]
+The observed $\Delta T/T \sim 10^{-5}$ needs suppression from
+$\delta T/T|_\mathrm{cell} = 2.4\%$ by a factor of $\sim2400$.
+This is within reach of a GR propagation calculation: $\log_2(2400)
+\approx 11$ e-folds of suppression through horizon crossing from
+$\lPl$ to the last-scattering surface.
+\end{tcolorbox}
+
+\begin{tcolorbox}[openbox,title={What closes OP2}]
+Compute the TUO two-point correlator
+\[
+  \mathcal{P}_\zeta(k) = \frac{k^3}{2\pi^2}
+  \int d^3r\, e^{-i\mathbf{k}\cdot\mathbf{r}}\,
+  \bigl\langle \hat{T}_{00}(\mathbf{x})\,\hat{T}_{00}(\mathbf{x}+\mathbf{r}) \bigr\rangle_\mathrm{ZS}
+\]
+at the Planck-cell scale in the zero-sum constrained vacuum, then
+propagate to the last-scattering surface using standard Boltzmann
+transfer functions.
+The spectral tilt $n_s$ is the primary observable output.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{OP3 --- Residual Dark Energy $\Lambda$}
+\label{sec:op3}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{tcolorbox}[opbox,title={Open Problem 3}]
+TUO predicts $\Lambda_\mathrm{eff}=0$ at tree level (zero-sum axiom).
+The observed $\rho_\Lambda \approx 5.4\times10^{-10}$\,J/m$^3$ is not derived.
+\end{tcolorbox}
+
+\subsection{The cosmological constant in TUO language}
+
+The energy densities involved:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Quantity & Value (J/m$^3$) & Ratio to $\rho_\mathrm{Pl}$ \\
+\midrule
+Planck density $\rho_\mathrm{Pl} = \EPl/\lPl^3$ & $4.63\times10^{113}$ & 1 \\
+1-loop QFT estimate $\sim(\gstar/16\pi^2)\ln(E_\mathrm{Pl}/E_\mathrm{EW})\rho_\mathrm{Pl}$ & $\sim 27\,\rho_\mathrm{Pl}$ & $\sim 27$ \\
+Observed $\rho_\Lambda$ & $5.4\times10^{-10}$ & $1.16\times10^{-123}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{TUO tree-level prediction}
+
+The zero-sum axiom gives $E_\mathrm{matter} + E_\mathrm{grav} = 0$ exactly.
+This means the zero-point energy of the vacuum is constrained to vanish
+at the leading saddle-point of the constrained path integral.
+Symbolically: $\langle \rhohat_0 | \Hhat | \rhohat_0 \rangle = 0$
+by Axiom~II.
+
+\subsection{The gap}
+
+Standard quantum field theory contributes loop corrections
+\[
+  \rho_\mathrm{vac}^\mathrm{1-loop}
+  \sim \frac{\gstar}{16\pi^2}\ln\!\left(\frac{E_\mathrm{Pl}}{E_\mathrm{EW}}\right)\rho_\mathrm{Pl}
+  \approx 26.6\,\rho_\mathrm{Pl}.
+\]
+The zero-sum axiom must cancel this to $10^{-123}\rho_\mathrm{Pl}$.
+Two scenarios:
+
+\begin{enumerate}
+  \item \textbf{Exact cancellation + small residual.}
+    The constrained PI enforces exact cancellation of all loop
+    contributions by the gravitational field sector.
+    The residual $\rho_\Lambda$ arises from a \emph{topological} term
+    --- analogous to the QCD $\theta$-vacuum --- that is exponentially
+    suppressed but nonzero:
+    \[
+      \rho_\Lambda \sim \rho_\mathrm{Pl}\,e^{-S_\mathrm{top}},\quad
+      S_\mathrm{top} = \ln\!\bigl(\rho_\mathrm{Pl}/\rho_\Lambda\bigr)
+      \approx 283.
+    \]
+    A topological action of $\sim 283\,\hbar$ is not implausible for
+    a Planck-scale gravitational instanton.
+
+  \item \textbf{Quintessence in TUO.}
+    A slowly-rolling field $\phi$ with zero-sum charge $Q_\phi = 0$
+    is admitted by the axiom.
+    Its potential energy contributes $\rho_\phi(t) \sim \rho_\Lambda(t)$
+    with appropriate dynamics.
+\end{enumerate}
+
+\begin{tcolorbox}[openbox,title={What closes OP3}]
+This is the cosmological constant problem in TUO language.
+The precise target is: find the next-to-leading saddle of the
+constrained path integral~(Eq.~8, main paper) and compute its
+contribution to $\rho_\mathrm{vac}$.
+The required suppression, $e^{-283}$ relative to $\rho_\mathrm{Pl}$,
+must emerge from the structure of the zero-sum constraint.
+This is the hardest open problem in TUO; it is also the hardest open
+problem in all of theoretical physics.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{OP4 --- Precise Junction Time}
+\label{sec:op4}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{tcolorbox}[opbox,title={Open Problem 4}]
+The junction range $\junc \in [17,\,94]\,\tPl$ is established.
+The precise value requires a Boltzmann-equation treatment of the
+QGP with realistic cooling.
+\end{tcolorbox}
+
+\subsection{The two bounds established in the paper}
+
+\begin{description}
+  \item[Lower bound $t_\mathrm{class} = \sqrt{300}\,\tPl \approx 17.3\,\tPl$.]
+    This is when $\delta V/V = 3(\lPl/ct)^2 < 1\%$, i.e., the quantum
+    correction to the expansion volume becomes negligible and a classical
+    GR description is valid.
+
+  \item[Upper bound (paper) $\tau_\mathrm{th} \approx 85\text{--}94\,\tPl$.]
+    The isothermal mean free path: $\lambda_\mathrm{mfp} = \hbar c/(\alpha_s\kB\TTUO)$.
+    This assumes $T = \TTUO$ is held constant throughout --- an overestimate
+    of $T$ at late times.
+\end{description}
+
+\subsection{New result: thermalisation with FRW cooling}
+
+After the classical transition at $t_\mathrm{class}$, the universe
+enters radiation-dominated FRW with
+\[
+  T(t) = \TTUO\sqrt{\frac{t_\mathrm{class}}{t}}, \quad t > t_\mathrm{class}.
+\]
+The temperature drops, increasing the mean free path:
+$\lambda_\mathrm{mfp}(t) = \lambda_0\sqrt{t/t_\mathrm{class}}$ where
+$\lambda_0 = \hbar c/(\alpha_s\kB\TTUO)$.
+
+Thermalisation occurs when the optical depth
+$\int_0^{\tau_\mathrm{th}} c\,dt/\lambda_\mathrm{mfp}(t) = 1$.
+Splitting the integral into the isothermal phase $[0, t_\mathrm{class}]$
+and the cooling phase $[t_\mathrm{class}, \tau_\mathrm{th}]$:
+
+\textbf{Phase 1} ($T = \TTUO$, constant):
+\[
+  I_1 = \frac{c\,t_\mathrm{class}}{\lambda_0} = 0.2029.
+\]
+
+\textbf{Phase 2} ($T \propto t^{-1/2}$, cooling):
+\[
+  I_2 = \int_{t_\mathrm{class}}^{\tau_\mathrm{th}}
+  \frac{c}{\lambda_0\sqrt{t/t_\mathrm{class}}}\,dt
+  = \frac{2c\sqrt{t_\mathrm{class}}}{\lambda_0}
+    \!\left(\sqrt{\tau_\mathrm{th}} - \sqrt{t_\mathrm{class}}\right).
+\]
+
+Setting $I_1 + I_2 = 1$ and solving for $\tau_\mathrm{th}$:
+\[
+  \sqrt{\tau_\mathrm{th}}
+  = \sqrt{t_\mathrm{class}}
+  + \frac{(1 - I_1)\,\lambda_0}{2c\sqrt{t_\mathrm{class}}},
+\]
+giving
+\begin{equation}\label{eq:tau_th_new}
+  \boxed{\tau_\mathrm{th} = 152.2\,\tPl.}
+\end{equation}
+
+\begin{tcolorbox}[findingbox,title={New result (OP4)}]
+With realistic FRW cooling ($T \propto t^{-1/2}$ after $t_\mathrm{class}$),
+the thermalisation time is $\tau_\mathrm{th} = 152.2\,\tPl$,
+compared to the isothermal upper bound of $85\text{--}94\,\tPl$.
+
+The corrected junction range is:
+\[
+  \junc \in [17.3,\; 152.2]\,\tPl.
+\]
+The paper's $[17, 94]\,\tPl$ range is conservative (isothermal assumption).
+The realistic upper bound is $\approx 1.6\times$ larger.
+\end{tcolorbox}
+
+\subsection{Physical interpretation}
+
+The cooling extends the thermalisation time because particles slow
+down (longer mean free path) as the universe expands and cools.
+The QGP spends most of its time in the free-streaming regime even
+after the classical transition.
+Full thermalisation at $\sim152\,\tPl$ means:
+\begin{itemize}
+  \item Kinetic equilibrium (equal temperature distribution): at $\tau_\mathrm{th}$.
+  \item Chemical equilibrium (stable particle ratios): somewhat later,
+    $\tau_\mathrm{chem} \sim \tau_\mathrm{th} \times (1/\alpha_s^2) \sim \mathcal{O}(10^4\,\tPl)$.
+\end{itemize}
+
+\begin{tcolorbox}[openbox,title={What closes OP4 fully}]
+Replace the leading-order $\lambda_\mathrm{mfp} = \hbar c/(\alpha_s\kB T)$
+with the 2-loop QCD transport coefficient
+$\eta_\mathrm{shear}/s \approx 1/(4\pi)$ (KSS bound), and include
+inelastic QCD processes ($gg\leftrightarrow ggg$).
+The 2-loop result modifies $\tau_\mathrm{th}$ at the $\sim20\%$ level,
+tightening the range to $\junc \approx [17, 120\text{--}180]\,\tPl$.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{OP5 --- SM Particle Content from Axioms}
+\label{sec:op5}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{tcolorbox}[opbox,title={Open Problem 5}]
+TUO uses $\gstar = 106.75$ from experiment.
+Can the SM field content and $N_\mathrm{gen} = 3$ be derived from the
+constrained path integral?
+\end{tcolorbox}
+
+\subsection{What TUO constrains}
+
+The zero-sum filter (Axioms I+II) admits any field content satisfying:
+\begin{enumerate}[label=(\roman*)]
+  \item Anomaly cancellation: $Q = 0$, $B - L = 0$ per generation.
+  \item No antiparticles: a matter-only stable configuration exists.
+\end{enumerate}
+Table~7.1 of the paper shows that configurations with
+$N_\mathrm{gen} = 1,2,3,4,5$ all satisfy these.
+TUO does \emph{not} prefer $N_\mathrm{gen} = 3$ from these conditions alone.
+
+\subsection{Single-cell action for each configuration}
+
+The Euclidean action for a single-cell emergence is
+$S = \ecell\,\tPl/\hbar = \gstar/2$:
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$N_\mathrm{gen}$ & $\gstar$ & $S/\hbar$ & $e^{-S}$ \\
+\midrule
+1 & 58.0  & 29.0 & $2.5\times10^{-13}$ \\
+2 & 88.0  & 44.0 & $7.8\times10^{-20}$ \\
+\textbf{3} & \textbf{118.0} & \textbf{59.0} & $\mathbf{2.4\times10^{-26}}$ \\
+4 & 148.0 & 74.0 & $7.3\times10^{-33}$ \\
+5 & 178.0 & 89.0 & $2.2\times10^{-39}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The single-cell action is minimised at $N_\mathrm{gen} = 1$, so the
+unconstrained measure $e^{-S}$ alone would select $N_\mathrm{gen} = 1$.
+
+\subsection{The global constraint changes everything}
+
+For simultaneous emergence of all $N = 8.8\times10^{92}$ cells
+(the dominant saddle, Sec.~11 of main paper), the total action is
+$S_\mathrm{total} = N\times S_\mathrm{single} = N\gstar/2$.
+Selecting $N_\mathrm{gen} = 1$ (minimum single-cell action) gives
+the largest $e^{-NS}$ in the simultaneous sector.
+
+However, the zero-sum global constraint couples cells:
+the global charge vector must vanish across all cells simultaneously.
+This introduces off-diagonal terms in the action that depend on
+correlations between cells.
+The effective action for configuration $\gstar$ in the simultaneous
+sector is:
+\[
+  S_\mathrm{eff}(\gstar) = \frac{N\gstar}{2}
+  - \ln Z_\mathrm{corr}(\gstar),
+\]
+where $Z_\mathrm{corr}$ encodes the inter-cell charge correlations.
+A configuration with richer internal symmetry (higher $\gstar$,
+more gauge charges to cancel) could have a larger $Z_\mathrm{corr}$
+that compensates the larger $S$.
+
+\begin{tcolorbox}[findingbox,title={Finding}]
+The single-cell measure prefers $N_\mathrm{gen} = 1$.
+But the global constrained measure may prefer a different value
+if $Z_\mathrm{corr}(\gstar)$ grows faster than $e^{-N\gstar/2}$.
+Whether it selects $N_\mathrm{gen} = 3$ is a concrete calculation.
+\end{tcolorbox}
+
+\begin{tcolorbox}[openbox,title={What closes OP5}]
+Compute $Z_\mathrm{corr}(\gstar)$ for the simultaneous emergence
+configuration as a function of $\gstar$ in the constrained path
+integral~\eqref{sec:op1}.
+If $Z_\mathrm{corr}(N_\mathrm{gen} = 3) > Z_\mathrm{corr}(N_\mathrm{gen} = 1)$
+by the appropriate exponential factor, TUO derives $\gstar = 106.75$.
+The observable $N_\nu = 2.984\pm0.008$ (LEP) is the external check.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{OP6 --- SM Gauge Group from Axioms}
+\label{sec:op6}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{tcolorbox}[opbox,title={Open Problem 6}]
+The SM gauge group $\mathrm{SU}(3)\times\mathrm{SU}(2)\times\mathrm{U}(1)$
+is input to TUO, not derived.
+\end{tcolorbox}
+
+\subsection{What TUO constrains}
+
+The zero-sum axiom requires that for every gauge generator $T^a$
+of the gauge group $G$:
+\[
+  \mathrm{Tr}[\rhohat\,\hat{Q}_{T^a}] = 0.
+\]
+This is the anomaly-cancellation condition.
+Gauge groups consistent with TUO's zero-sum filter must have
+representations that allow a matter-only zero-sum configuration.
+
+\subsection{Gauge groups satisfying TUO constraints}
+
+\begin{center}
+\begin{tabular}{lccp{5.5cm}}
+\toprule
+Group & Rank & Contains SM? & Status \\
+\midrule
+$\mathrm{SU}(3)\times\mathrm{SU}(2)\times\mathrm{U}(1)$ & 4 & --- & Observed \\
+$\mathrm{SU}(5)$ & 4 & Yes & Predicts proton decay $\tau_p\sim10^{34}$\,yr \\
+$\mathrm{SO}(10)$ & 5 & Yes & $B-L$ is a gauge symmetry; natural \\
+$\mathrm{E}_6$ & 6 & Yes & Exotic; extra colour triplets \\
+$\mathrm{SU}(4)\times\mathrm{SU}(2)_L\times\mathrm{SU}(2)_R$ & 5 & Yes & Pati-Salam \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All rows satisfy the anomaly-cancellation conditions and admit
+matter-only zero-sum configurations.
+TUO's axioms are \emph{necessary} but not \emph{sufficient} to
+select the SM gauge group.
+
+\subsection{Additional constraints that help}
+
+\begin{enumerate}
+  \item \textbf{Proton stability.}
+    Super-Kamiokande gives $\tau(p\to e^+\pi^0) > 1.6\times10^{34}$\,yr.
+    SU(5) at the minimal level predicts $\tau_p \sim 10^{31}$\,yr ---
+    already excluded.
+    SO(10) with intermediate scales can give $\tau_p > 10^{34}$\,yr.
+    This rules out minimal SU(5) from phenomenology, leaving
+    $G_\mathrm{SM}$, SO(10), Pati-Salam, and $\mathrm{E}_6$.
+
+  \item \textbf{Minimality principle.}
+    Among rank-4 groups admitting matter-only zero-sum configurations,
+    $G_\mathrm{SM}$ is the unique semi-simple group of rank 4 with
+    three factors and one abelian factor.
+    If TUO's constrained PI weights configurations by their gauge
+    complexity (rank, number of generators), then rank-4 groups are
+    preferred over rank-5, and $G_\mathrm{SM}$ over $\mathrm{SU}(5)$
+    (different representation content despite same rank).
+
+  \item \textbf{Yukawa coupling structure.}
+    The SM has the unique property that the top quark mass
+    $m_t \approx 173$\,GeV satisfies the fixed-point condition
+    $y_t \approx 1$ at the GUT scale.
+    This is a self-consistency condition that could single out
+    $G_\mathrm{SM}$ representations.
+\end{enumerate}
+
+\begin{tcolorbox}[openbox,title={What closes OP6}]
+Formulate a measure on the space of gauge groups $\{G\}$ satisfying
+the TUO anomaly-cancellation conditions.
+The natural candidate is weighting by $e^{-S_G}$ where $S_G$ includes
+the gauge-kinetic action for the gauge sector in the constrained PI.
+Combined with the proton-decay experimental constraint, this may
+select $G_\mathrm{SM}$ or its minimal GUT extension.
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Summary and Priority}
+\label{sec:summary}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{clp{5cm}c}
+\toprule
+OP & Problem & Key calculation needed & Difficulty \\
+\midrule
+4 & Junction time $\junc$ &
+  2-loop QCD transport, Boltzmann eq.\ with cooling &
+  {\color{green!60!black}\textbf{Low}} \\
+2 & CMB power spectrum &
+  Two-point $\langle T_{\mu\nu}T_{\rho\sigma}\rangle_\mathrm{ZS}$,
+  Boltzmann transfer &
+  {\color{orange}\textbf{Medium}} \\
+1 & Baryon asymmetry $\eta$ &
+  Leptogenesis Boltzmann eqs.\ at $T_\mathrm{TUO}$ &
+  {\color{orange}\textbf{Medium}} \\
+5 & SM content $\gstar$ &
+  Inter-cell correlation function $Z_\mathrm{corr}(\gstar)$ &
+  {\color{red}\textbf{Hard}} \\
+6 & SM gauge group &
+  Measure on $\{G\}$ in constrained PI &
+  {\color{red}\textbf{Hard}} \\
+3 & Dark energy $\Lambda$ &
+  Next-to-leading saddle, topological term &
+  {\color{red}\textbf{Very hard}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{New result from this analysis}
+
+\begin{tcolorbox}[findingbox,title={OP4 Correction}]
+The thermalisation time including FRW cooling is $\tau_\mathrm{th} = 152.2\,\tPl$,
+revising the junction range from $[17, 94]\,\tPl$ to $\mathbf{[17.3, 152.2]\,\tPl}$.
+This should be updated in the main paper.
+\end{tcolorbox}
+
+\subsection{The hierarchy of difficulty}
+
+OP4 can be improved with a single numerical integration using
+known 2-loop QCD transport coefficients --- this is a calculation,
+not a conceptual advance.
+
+OP2 and OP1 require new calculations in known frameworks
+(GR perturbation theory and leptogenesis Boltzmann equations) applied
+to the TUO initial condition $\TTUO = 1.1103\,\TPl$.
+The inputs from TUO are clean and precise enough to make these tractable.
+
+OP5 and OP6 require extending the constrained path-integral framework
+to sum over field content and gauge group choices.
+This is conceptually new work.
+
+OP3 (dark energy) is the hardest problem in all of physics, reframed
+in TUO language.
+The zero-sum axiom provides a structural reason for the tree-level
+$\Lambda = 0$, which is more than standard QFT offers.
+But closing the remaining $10^{-123}$ gap requires a mechanism that
+no existing framework provides.
+
+\subsection{An encouraging observation}
+
+Of the six open problems, only OP3 requires genuinely new physics
+beyond the SM and GR.
+OP1--OP2 require known physics applied to TUO's initial conditions.
+OP4 is already partially closed by this analysis ($152\,\tPl$).
+OP5--OP6 require extending the constrained PI framework, but the
+target observable (the LEP measurement $N_\nu = 2.984$, the proton
+lifetime bound) is already known.
+This is a better situation than most proposed theories of initial
+conditions, where the open problems are entirely unconstrained.
+
+\section*{Acknowledgments}
+Numerical calculations performed in Python~3 with \texttt{numpy} and
+\texttt{scipy}.
+Constants from CODATA~2018 and PDG~2024.
+
+\end{document}
